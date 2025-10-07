@@ -1,4 +1,6 @@
-﻿namespace Domain.Entities.Parking
+﻿using Domain.Entities.Common;
+
+namespace Domain.Entities.Parking
 {
     internal sealed class Parking : BaseEntity
     {
@@ -6,7 +8,7 @@
 
         public DateTime? ExitDateTime { get; set; }
 
-        public int TotalHours { get; set; }
+        public double TotalHours { get; set; }
 
         public Guid VehicleId { get; set; }
 

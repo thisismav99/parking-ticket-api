@@ -1,4 +1,6 @@
-﻿namespace Domain.Entities.Vehicle
+﻿using Domain.Entities.Common;
+
+namespace Domain.Entities.Vehicle
 {
     internal sealed class Vehicle : BaseEntity
     {

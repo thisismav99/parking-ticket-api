@@ -1,4 +1,6 @@
-﻿namespace Domain.Entities.Customer
+﻿using Domain.Entities.Common;
+
+namespace Domain.Entities.Customer
 {
     internal sealed class Customer : BaseEntity
     {

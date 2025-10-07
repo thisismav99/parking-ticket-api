@@ -1,8 +1,8 @@
-﻿namespace Domain.Entities
+﻿namespace Domain.Entities.Common
 {
     internal sealed class Address : BaseEntity
     {
-        public string? LotNo { get; set; }
+        public int? LotNo { get; set; }
 
         public required string Street { get; set; }
 

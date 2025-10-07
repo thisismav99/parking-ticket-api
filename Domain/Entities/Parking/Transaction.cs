@@ -1,4 +1,6 @@
-﻿namespace Domain.Entities.Parking
+﻿using Domain.Entities.Common;
+
+namespace Domain.Entities.Parking
 {
     internal sealed class Transaction : BaseEntity
     {

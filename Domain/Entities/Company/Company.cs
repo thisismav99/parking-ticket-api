@@ -1,4 +1,6 @@
-﻿namespace Domain.Entities.Company
+﻿using Domain.Entities.Common;
+
+namespace Domain.Entities.Company
 {
     internal sealed class Company : BaseEntity
     {
