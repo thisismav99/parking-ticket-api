@@ -1,8 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("Persistence")]
 [assembly: InternalsVisibleTo("Infrastructure")]
-namespace Domain.Properties
+namespace Persistence.Properties
 {
     internal static class AssemblyInfo
     {
