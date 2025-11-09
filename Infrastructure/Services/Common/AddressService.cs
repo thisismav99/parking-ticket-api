@@ -1,20 +1,11 @@
-﻿using CSharpFunctionalExtensions;
-using Domain.Entities.Common;
+﻿using Domain.Entities.Common;
+using Infrastructure.Interfaces.Common;
 using Infrastructure.Utilities.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Contexts;
 
 namespace Infrastructure.Services.Common
 {
-    internal interface IAddressService
-    {
-        Task<Result<Guid>> AddAddress(Address address);
-
-        Task<Result<Address?>> GetAddressById(Guid addressId);
-
-        Task<List<Address>> GetAddresses(int pageNumber, int pageSize);
-    }
-
     internal class AddressService : IAddressService
     {
         private readonly ParkingTicketDbContext _parkingTicketDbContext;
@@ -26,34 +17,22 @@ namespace Infrastructure.Services.Common
             _addresses = _parkingTicketDbContext.Set<Address>();
         }
 
-        public async Task<Result<Guid>> AddAddress(Address address)
+        public async Task<Guid> AddAddress(Address address, CancellationToken cancellationToken)
         {
-            if(address is not null)
-            {
-                await _addresses.AddAsync(address);
-                await _parkingTicketDbContext.SaveChangesAsync();
+            await _addresses.AddAsync(address, cancellationToken);
+            await _parkingTicketDbContext.SaveChangesAsync(cancellationToken);
 
-                return Result.Success(address.Id);
-            }
-
-            return Result.Failure<Guid>("Address cannot be null");
+            return address.Id;
         }
 
-        public async Task<Result<Address?>> GetAddressById(Guid addressId)
+        public async Task<Address?> GetAddressById(Guid addressId, CancellationToken cancellationToken)
         {
-            if(addressId != Guid.Empty)
-            {
-                var address = await _addresses.FirstOrDefaultAsync(a => a.Id == addressId);
-                
-                return Result.Success(address);
-            }
-
-            return Result.Failure<Address?>("Address Id cannot be empty");
+            return await _addresses.FirstOrDefaultAsync(a => a.Id == addressId, cancellationToken);
         }
 
-        public async Task<List<Address>> GetAddresses(int pageNumber, int pageSize)
+        public async Task<List<Address>> GetAddresses(int pageNumber, int pageSize, CancellationToken cancellationToken)
         {
-            return await GetPagedList<Address>.GetList(_addresses, pageNumber, pageSize);
+            return await GetPagedList<Address>.GetList(_addresses, pageNumber, pageSize, cancellationToken);
         }
     }
 }

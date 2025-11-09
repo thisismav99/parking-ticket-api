@@ -1,19 +1,10 @@
-﻿using CSharpFunctionalExtensions;
+﻿using Infrastructure.Interfaces.Employee;
 using Infrastructure.Utilities.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Contexts;
 
 namespace Infrastructure.Services.Employee
 {
-    internal interface IEmployeeService
-    {
-        Task<Result<Guid>> AddEmployee(Domain.Entities.Employee.Employee employee);
-
-        Task<List<Domain.Entities.Employee.Employee>> GetEmployees(int pageNumber, int pageSize);
-
-        Task<Result<Domain.Entities.Employee.Employee?>> GetEmployeeById(Guid employeeId);
-    }
-
     internal class EmployeeService : IEmployeeService
     {
         private readonly ParkingTicketDbContext _parkingTicketDbContext;
@@ -25,34 +16,22 @@ namespace Infrastructure.Services.Employee
             _employees = _parkingTicketDbContext.Set<Domain.Entities.Employee.Employee>();
         }
 
-        public async Task<Result<Guid>> AddEmployee(Domain.Entities.Employee.Employee employee)
+        public async Task<Guid> AddEmployee(Domain.Entities.Employee.Employee employee, CancellationToken cancellationToken)
         {
-            if (employee is not null)
-            {
-                await _employees.AddAsync(employee);
-                await _parkingTicketDbContext.SaveChangesAsync();
+            await _employees.AddAsync(employee, cancellationToken);
+            await _parkingTicketDbContext.SaveChangesAsync(cancellationToken);
 
-                return Result.Success(employee.Id);
-            }
-
-            return Result.Failure<Guid>("Employee cannot be null");
+            return employee.Id;
         }
 
-        public async Task<Result<Domain.Entities.Employee.Employee?>> GetEmployeeById(Guid employeeId)
+        public async Task<Domain.Entities.Employee.Employee?> GetEmployeeById(Guid employeeId, CancellationToken cancellationToken)
         {
-            if(employeeId != Guid.Empty)
-            {
-                var employee = await _employees.FirstOrDefaultAsync(e => e.Id == employeeId);
-
-                return Result.Success(employee);
-            }
-
-            return Result.Failure<Domain.Entities.Employee.Employee?>("Employee Id cannot be empty");
+            return await _employees.FirstOrDefaultAsync(e => e.Id == employeeId, cancellationToken);
         }
 
-        public async Task<List<Domain.Entities.Employee.Employee>> GetEmployees(int pageNumber, int pageSize)
+        public async Task<List<Domain.Entities.Employee.Employee>> GetEmployees(int pageNumber, int pageSize, CancellationToken cancellationToken)
         {
-            return await GetPagedList<Domain.Entities.Employee.Employee>.GetList(_employees, pageNumber, pageSize);
+            return await GetPagedList<Domain.Entities.Employee.Employee>.GetList(_employees, pageNumber, pageSize, cancellationToken);
         }
     }
 }

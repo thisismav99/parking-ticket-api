@@ -1,19 +1,10 @@
-﻿using CSharpFunctionalExtensions;
+﻿using Infrastructure.Interfaces.Parking;
 using Infrastructure.Utilities.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Contexts;
 
 namespace Infrastructure.Services.Parking
 {
-    internal interface IParkingService
-    {
-        Task<Result<Guid>> AddParking(Domain.Entities.Parking.Parking parking);
-
-        Task<Result<Domain.Entities.Parking.Parking?>> GetParkingById(Guid parkingId);
-
-        Task<List<Domain.Entities.Parking.Parking>> GetParkings(int pageNumber, int pageSize);
-    }
-
     internal class ParkingService : IParkingService
     {
         private readonly ParkingTicketDbContext _parkingTicketDbContext;
@@ -25,34 +16,22 @@ namespace Infrastructure.Services.Parking
             _parkings = _parkingTicketDbContext.Set<Domain.Entities.Parking.Parking>();
         }
 
-        public async Task<Result<Guid>> AddParking(Domain.Entities.Parking.Parking parking)
+        public async Task<Guid> AddParking(Domain.Entities.Parking.Parking parking, CancellationToken cancellationToken)
         {
-            if(parking is not null)
-            {
-                await _parkings.AddAsync(parking);
-                await _parkingTicketDbContext.SaveChangesAsync();
+            await _parkings.AddAsync(parking, cancellationToken);
+            await _parkingTicketDbContext.SaveChangesAsync(cancellationToken);
 
-                return Result.Success(parking.Id);
-            }
-
-            return Result.Failure<Guid>("Parking cannot be null");
+            return parking.Id;
         }
 
-        public async Task<Result<Domain.Entities.Parking.Parking?>> GetParkingById(Guid parkingId)
+        public async Task<Domain.Entities.Parking.Parking?> GetParkingById(Guid parkingId, CancellationToken cancellationToken)
         {
-            if(parkingId != Guid.Empty)
-            {
-                var parking = await _parkings.FirstOrDefaultAsync(p => p.Id == parkingId);
-                
-                return Result.Success(parking);
-            }
-
-            return Result.Failure<Domain.Entities.Parking.Parking?>("Parking Id cannot be empty");
+            return await _parkings.FirstOrDefaultAsync(p => p.Id == parkingId, cancellationToken);
         }
 
-        public async Task<List<Domain.Entities.Parking.Parking>> GetParkings(int pageNumber, int pageSize)
+        public async Task<List<Domain.Entities.Parking.Parking>> GetParkings(int pageNumber, int pageSize, CancellationToken cancellationToken)
         {
-            return await GetPagedList<Domain.Entities.Parking.Parking>.GetList(_parkings, pageNumber, pageSize);
+            return await GetPagedList<Domain.Entities.Parking.Parking>.GetList(_parkings, pageNumber, pageSize, cancellationToken);
         }
     }
 }

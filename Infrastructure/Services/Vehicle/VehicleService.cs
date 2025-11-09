@@ -1,19 +1,10 @@
-﻿using CSharpFunctionalExtensions;
+﻿using Infrastructure.Interfaces.Vehicle;
 using Infrastructure.Utilities.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Contexts;
 
 namespace Infrastructure.Services.Vehicle
 {
-    internal interface IVehicleService
-    {
-        Task<Result<Guid>> AddVehicle(Domain.Entities.Vehicle.Vehicle vehicle);
-
-        Task<List<Domain.Entities.Vehicle.Vehicle>> GetVehicles(int pageNumber, int pageSize);
-
-        Task<Result<Domain.Entities.Vehicle.Vehicle?>> GetVehicleById(Guid vehicleId);
-    }
-
     internal class VehicleService : IVehicleService
     {
         private readonly ParkingTicketDbContext _parkingTicketDbContext;
@@ -25,34 +16,22 @@ namespace Infrastructure.Services.Vehicle
             _vehicles = _parkingTicketDbContext.Set<Domain.Entities.Vehicle.Vehicle>();
         }
 
-        public async Task<Result<Guid>> AddVehicle(Domain.Entities.Vehicle.Vehicle vehicle)
+        public async Task<Guid> AddVehicle(Domain.Entities.Vehicle.Vehicle vehicle, CancellationToken cancellationToken)
         {
-            if(vehicle is not null)
-            {
-                await _vehicles.AddAsync(vehicle);
-                await _parkingTicketDbContext.SaveChangesAsync();
+            await _vehicles.AddAsync(vehicle, cancellationToken);
+            await _parkingTicketDbContext.SaveChangesAsync(cancellationToken);
 
-                return Result.Success(vehicle.Id);
-            }
-
-            return Result.Failure<Guid>("Vehicle cannot be null");
+            return vehicle.Id;
         }
 
-        public async Task<Result<Domain.Entities.Vehicle.Vehicle?>> GetVehicleById(Guid vehicleId)
+        public async Task<Domain.Entities.Vehicle.Vehicle?> GetVehicleById(Guid vehicleId, CancellationToken cancellationToken)
         {
-            if(vehicleId != Guid.Empty)
-            {
-                var vehicle = await _vehicles.FirstOrDefaultAsync(v => v.Id == vehicleId);
-
-                return Result.Success(vehicle);
-            }
-
-            return Result.Failure<Domain.Entities.Vehicle.Vehicle?>("Vehicle Id cannot be empty");
+            return await _vehicles.FirstOrDefaultAsync(v => v.Id == vehicleId, cancellationToken);
         }
 
-        public async Task<List<Domain.Entities.Vehicle.Vehicle>> GetVehicles(int pageNumber, int pageSize)
+        public async Task<List<Domain.Entities.Vehicle.Vehicle>> GetVehicles(int pageNumber, int pageSize, CancellationToken cancellationToken)
         {
-            return await GetPagedList<Domain.Entities.Vehicle.Vehicle>.GetList(_vehicles, pageNumber, pageSize);
+            return await GetPagedList<Domain.Entities.Vehicle.Vehicle>.GetList(_vehicles, pageNumber, pageSize, cancellationToken);
         }
     }
 }

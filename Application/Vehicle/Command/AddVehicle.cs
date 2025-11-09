@@ -1,14 +1,20 @@
-﻿using Application.Vehicle.DTO;
+﻿using Application.Utilities.Extensions;
 using CSharpFunctionalExtensions;
-using Infrastructure.Services.Vehicle;
+using Infrastructure.Interfaces.Vehicle;
 using MediatR;
+using System.ComponentModel.DataAnnotations;
 
 namespace Application.Vehicle.Command
 {
-    internal class AddVehicleCommand : IRequest<Result<Guid>>
-    {
-        public required AddVehicleDTO AddVehicle { get; set; }
-    }
+    internal record AddVehicleCommand([Required, MaxLength(10)] string PlateNo,
+        [Required, MaxLength(50)] string Brand,
+        [MaxLength(30)] string? Color,
+        [MaxLength(50)] string? Model,
+        [Required] bool IsElectric,
+        [Required] bool IsHybrid,
+        Guid? CustomerId,
+        [Required, MaxLength(100)] string CreatedBy,
+        [Required] bool IsActive) : IRequest<Result<Guid>>;
 
     internal class AddVehicleCommandHandler : IRequestHandler<AddVehicleCommand, Result<Guid>>
     {
@@ -21,17 +27,32 @@ namespace Application.Vehicle.Command
 
         public async Task<Result<Guid>> Handle(AddVehicleCommand request, CancellationToken cancellationToken)
         {
-            var vehicle = new Domain.Entities.Vehicle.Vehicle(request.AddVehicle.PlateNo,
-                request.AddVehicle.Brand,
-                request.AddVehicle.Color,
-                request.AddVehicle.Model,
-                request.AddVehicle.IsElectric,
-                request.AddVehicle.IsHybrid,
-                request.AddVehicle.CustomerId,
-                request.AddVehicle.CreatedBy,
-                request.AddVehicle.IsActive);
+            var errors = ValidatorHelper<AddVehicleCommand>.Errors(request);
+            bool hasErrors = !string.IsNullOrEmpty(errors);
 
-            return await _vehicleService.AddVehicle(vehicle);
+            if (hasErrors)
+            {
+                return Result.Failure<Guid>(errors);
+            }
+
+            var vehicle = new Domain.Entities.Vehicle.Vehicle(request.PlateNo,
+                request.Brand,
+                request.Color,
+                request.Model,
+                request.IsElectric,
+                request.IsHybrid,
+                request.CustomerId,
+                request.CreatedBy,
+                request.IsActive);
+
+            var result = await _vehicleService.AddVehicle(vehicle, cancellationToken);
+
+            if(result == Guid.Empty)
+            {
+                return Result.Failure<Guid>($"Error saving vehicle: {request.Brand} {request.Model}");
+            }
+
+            return Result.Success(result);
         }
     }
 }

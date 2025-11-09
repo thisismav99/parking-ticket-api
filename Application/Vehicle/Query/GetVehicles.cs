@@ -1,16 +1,11 @@
 ﻿using Application.Vehicle.DTO;
-using Infrastructure.Services.Vehicle;
+using Infrastructure.Interfaces.Vehicle;
 using Mapster;
 using MediatR;
 
 namespace Application.Vehicle.Query
 {
-    internal class GetVehiclesQuery : IRequest<List<ResponseVehicleDTO>>
-    {
-        public int PageNumber { get; set; }
-
-        public int PageSize { get; set; }
-    }
+    internal record GetVehiclesQuery(int PageNumber, int PageSize) : IRequest<List<ResponseVehicleDTO>>;
 
     internal class GetVehiclesQueryHandler : IRequestHandler<GetVehiclesQuery, List<ResponseVehicleDTO>>
     {
@@ -23,7 +18,7 @@ namespace Application.Vehicle.Query
 
         public async Task<List<ResponseVehicleDTO>> Handle(GetVehiclesQuery request, CancellationToken cancellationToken)
         {
-            var vehicles = await _vehicleService.GetVehicles(request.PageNumber, request.PageSize);
+            var vehicles = await _vehicleService.GetVehicles(request.PageNumber, request.PageSize, cancellationToken);
 
             List<ResponseVehicleDTO> vehicleDTOs = vehicles.Adapt<List<ResponseVehicleDTO>>();
 

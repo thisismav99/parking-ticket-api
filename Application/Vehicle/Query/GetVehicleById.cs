@@ -1,15 +1,12 @@
 ﻿using Application.Vehicle.DTO;
 using CSharpFunctionalExtensions;
-using Infrastructure.Services.Vehicle;
+using Infrastructure.Interfaces.Vehicle;
 using Mapster;
 using MediatR;
 
 namespace Application.Vehicle.Query
 {
-    internal class GetVehicleByIdQuery : IRequest<Result<ResponseVehicleDTO?>>
-    {
-        public Guid VehicleId { get; set; }
-    }
+    internal record GetVehicleByIdQuery(Guid VehicleId) : IRequest<Result<ResponseVehicleDTO?>>;
     
     internal class GetVehicleByIdQueryHandler : IRequestHandler<GetVehicleByIdQuery, Result<ResponseVehicleDTO?>>
     {
@@ -22,11 +19,11 @@ namespace Application.Vehicle.Query
 
         public async Task<Result<ResponseVehicleDTO?>> Handle(GetVehicleByIdQuery request, CancellationToken cancellationToken)
         {
-            var vehicle = await _vehicleService.GetVehicleById(request.VehicleId);
+            var vehicle = await _vehicleService.GetVehicleById(request.VehicleId, cancellationToken);
 
-            if(vehicle.IsFailure)
+            if(vehicle is null)
             {
-                return Result.Failure<ResponseVehicleDTO?>(vehicle.Error);
+                return Result.Failure<ResponseVehicleDTO?>($"No vehicle found for Id: {request.VehicleId}");
             }
 
             ResponseVehicleDTO? vehicleDTO = vehicle.Adapt<ResponseVehicleDTO?>();

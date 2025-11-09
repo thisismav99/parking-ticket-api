@@ -1,19 +1,10 @@
-﻿using CSharpFunctionalExtensions;
+﻿using Infrastructure.Interfaces.Customer;
 using Infrastructure.Utilities.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Contexts;
 
 namespace Infrastructure.Services.Customer
 {
-    internal interface ICustomerService
-    {
-        Task<Result<Guid>> AddCustomer(Domain.Entities.Customer.Customer customer);
-
-        Task<List<Domain.Entities.Customer.Customer>> GetCustomers(int pageNumber, int pageSize);
-
-        Task<Result<Domain.Entities.Customer.Customer?>> GetCustomerById(Guid customerId);
-    }
-
     internal class CustomerService : ICustomerService
     {
         private readonly ParkingTicketDbContext _parkingTicketDbContext;
@@ -25,34 +16,22 @@ namespace Infrastructure.Services.Customer
             _customers = _parkingTicketDbContext.Set<Domain.Entities.Customer.Customer>();
         }
 
-        public async Task<Result<Guid>> AddCustomer(Domain.Entities.Customer.Customer customer)
+        public async Task<Guid> AddCustomer(Domain.Entities.Customer.Customer customer, CancellationToken cancellationToken)
         {
-            if(customer is not null)
-            {
-                await _customers.AddAsync(customer);
-                await _parkingTicketDbContext.SaveChangesAsync();
+            await _customers.AddAsync(customer, cancellationToken);
+            await _parkingTicketDbContext.SaveChangesAsync(cancellationToken);
 
-                return Result.Success(customer.Id);
-            }
-
-            return Result.Failure<Guid>("Customer cannot be null");
+            return customer.Id;
         }
 
-        public async Task<Result<Domain.Entities.Customer.Customer?>> GetCustomerById(Guid customerId)
+        public async Task<Domain.Entities.Customer.Customer?> GetCustomerById(Guid customerId, CancellationToken cancellationToken)
         {
-            if(customerId != Guid.Empty)
-            {
-                var customer = await _customers.FirstOrDefaultAsync(c => c.Id == customerId);
-
-                return Result.Success(customer);
-            }
-
-            return Result.Failure<Domain.Entities.Customer.Customer?>("Customer Id cannot be empty");
+            return await _customers.FirstOrDefaultAsync(c => c.Id == customerId, cancellationToken);
         }
 
-        public async Task<List<Domain.Entities.Customer.Customer>> GetCustomers(int pageNumber, int pageSize)
+        public async Task<List<Domain.Entities.Customer.Customer>> GetCustomers(int pageNumber, int pageSize, CancellationToken cancellationToken)
         {
-            return await GetPagedList<Domain.Entities.Customer.Customer>.GetList(_customers, pageNumber, pageSize);
+            return await GetPagedList<Domain.Entities.Customer.Customer>.GetList(_customers, pageNumber, pageSize, cancellationToken);
         }
     }
 }

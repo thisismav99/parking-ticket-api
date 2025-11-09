@@ -1,6 +1,6 @@
 ﻿namespace Application.Vehicle.DTO
 {
-    internal class ResponseVehicleDTO
+    public class ResponseVehicleDTO
     {
         public required string PlateNo { get; set; }
 
