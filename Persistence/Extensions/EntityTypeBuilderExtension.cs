@@ -8,7 +8,7 @@ namespace Persistence.Extensions
         public static void ApplyBaseEntityProperties(this EntityTypeBuilder builder)
         {
             builder.HasKey("Id");
-            builder.Property<int>("Id").ValueGeneratedOnAdd();
+            builder.Property<Guid>("Id").ValueGeneratedOnAdd();
             builder.Property<string>("CreatedBy").IsRequired().HasMaxLength(100);
             builder.Property<DateTime>("Created").IsRequired().HasDefaultValueSql("GETDATE()");
             builder.Property<string>("UpdatedBy").IsRequired(false).HasMaxLength(100);

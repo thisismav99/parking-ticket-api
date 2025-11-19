@@ -22,7 +22,7 @@ namespace Persistence.Configurations.Parking
             builder.HasOne(x => x.Employee).WithMany().HasForeignKey(x => x.EmployeeId).OnDelete(DeleteBehavior.Cascade);
             builder.HasOne(x => x.Transaction).WithMany().HasForeignKey(x => x.TransactionId).OnDelete(DeleteBehavior.Cascade);
 
-            builder.ToTable("prk.Parkings");
+            builder.ToTable("Parkings", "parking");
         }
     }
 }
