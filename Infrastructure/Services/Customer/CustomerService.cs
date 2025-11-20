@@ -8,17 +8,23 @@ namespace Infrastructure.Services.Customer
     internal class CustomerService : ICustomerService
     {
         private readonly ParkingTicketDbContext _parkingTicketDbContext;
+        private readonly DbSet<Domain.Entities.Common.Address> _customerAddress;
         private readonly DbSet<Domain.Entities.Customer.Customer> _customers;
 
         public CustomerService(ParkingTicketDbContext parkingTicketDbContext)
         {
             _parkingTicketDbContext = parkingTicketDbContext;
+            _customerAddress = _parkingTicketDbContext.Set<Domain.Entities.Common.Address>();
             _customers = _parkingTicketDbContext.Set<Domain.Entities.Customer.Customer>();
         }
 
-        public async Task<Guid> AddCustomer(Domain.Entities.Customer.Customer customer, CancellationToken cancellationToken)
+        public async Task<Guid> AddCustomer(Domain.Entities.Customer.Customer customer,
+            Domain.Entities.Common.Address address,
+            CancellationToken cancellationToken)
         {
+            await _customerAddress.AddAsync(address, cancellationToken);
             await _customers.AddAsync(customer, cancellationToken);
+
             await _parkingTicketDbContext.SaveChangesAsync(cancellationToken);
 
             return customer.Id;

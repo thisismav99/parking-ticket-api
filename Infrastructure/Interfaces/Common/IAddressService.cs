@@ -4,7 +4,9 @@ namespace Infrastructure.Interfaces.Common
 {
     internal interface IAddressService
     {
-        Task<Guid> AddAddress(Address address, CancellationToken cancellationToken);
+        Task UpdateAddress(Address address, CancellationToken cancellationToken);
+
+        Task DeleteAddress(Guid addressId, CancellationToken cancellationToken);
 
         Task<Address?> GetAddressById(Guid addressId, CancellationToken cancellationToken);
 

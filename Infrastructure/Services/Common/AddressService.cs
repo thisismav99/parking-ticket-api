@@ -17,12 +17,17 @@ namespace Infrastructure.Services.Common
             _addresses = _parkingTicketDbContext.Set<Address>();
         }
 
-        public async Task<Guid> AddAddress(Address address, CancellationToken cancellationToken)
+        public async Task DeleteAddress(Guid addressId, CancellationToken cancellationToken)
         {
-            await _addresses.AddAsync(address, cancellationToken);
-            await _parkingTicketDbContext.SaveChangesAsync(cancellationToken);
+            var address = await _addresses.FirstOrDefaultAsync(x => x.Id == addressId, cancellationToken);
 
-            return address.Id;
+            if (address is not null)
+            {
+                _addresses.Remove(address);
+                await _parkingTicketDbContext.SaveChangesAsync(cancellationToken);
+            }
+
+            throw new ArgumentNullException($"No address found for {addressId}");
         }
 
         public async Task<Address?> GetAddressById(Guid addressId, CancellationToken cancellationToken)
@@ -33,6 +38,14 @@ namespace Infrastructure.Services.Common
         public async Task<List<Address>> GetAddresses(int pageNumber, int pageSize, CancellationToken cancellationToken)
         {
             return await GetPagedList<Address>.GetList(_addresses, pageNumber, pageSize, cancellationToken);
+        }
+
+        public async Task UpdateAddress(Address address, CancellationToken cancellationToken)
+        {
+            _addresses.Attach(address);
+            _parkingTicketDbContext.Entry(address).State = EntityState.Modified;
+
+            await _parkingTicketDbContext.SaveChangesAsync(cancellationToken);
         }
     }
 }
