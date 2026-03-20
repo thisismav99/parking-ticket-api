@@ -19,7 +19,7 @@ namespace Persistence.Configurations.Parking
             builder.Property(x => x.IsCard).IsRequired();
             builder.Property(x => x.IsCash).IsRequired();
 
-            builder.ToTable("prk.Transactions");
+            builder.ToTable("Transactions", "parking");
         }
     }
 }

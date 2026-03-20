@@ -18,7 +18,7 @@ namespace Persistence.Configurations.Customer
 
             builder.HasOne(x => x.Address).WithMany().HasForeignKey(x => x.AddressId).OnDelete(DeleteBehavior.Cascade);
 
-            builder.ToTable("cst.Customers");
+            builder.ToTable("Customers", "customer");
         }
     }
 }

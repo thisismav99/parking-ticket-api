@@ -17,7 +17,7 @@ namespace Persistence.Configurations.Common
             builder.Property(x => x.Region).IsRequired().HasMaxLength(50);
             builder.Property(x => x.Country).IsRequired().HasMaxLength(100);
 
-            builder.ToTable("cmn.Address");
+            builder.ToTable("Address", "common");
         }
     }
 }

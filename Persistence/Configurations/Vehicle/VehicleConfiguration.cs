@@ -19,7 +19,7 @@ namespace Persistence.Configurations.Vehicle
 
             builder.HasOne(x => x.Customer).WithMany().HasForeignKey(x => x.CustomerId).OnDelete(DeleteBehavior.SetNull);
 
-            builder.ToTable("vhc.Vehicles");
+            builder.ToTable("Vehicles", "vehicle");
         }
     }
 }

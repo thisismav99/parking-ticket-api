@@ -18,7 +18,7 @@ namespace Persistence.Configurations.Employee
             builder.HasOne(x => x.Address).WithMany().HasForeignKey(x => x.AddressId).OnDelete(DeleteBehavior.Cascade);
             builder.HasOne(x => x.Company).WithMany().HasForeignKey(x => x.CompanyId).OnDelete(DeleteBehavior.Cascade);
 
-            builder.ToTable("emp.Employees");
+            builder.ToTable("Employees", "employee");
         }
     }
 }
