@@ -1,4 +1,5 @@
 ﻿using Domain.Entities.Common;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Domain.Entities.Customer
 {
@@ -17,5 +18,20 @@ namespace Domain.Entities.Customer
         public Guid AddressId { get; set; }
 
         public required Address Address { get; set; }
+
+        private Customer() { }
+
+        [SetsRequiredMembers]
+        public Customer(string firstName, string? middleName, string lastName, string? contactNo, string? email, Address address, string createdBy, bool isActive)
+        {
+            FirstName = firstName;
+            MiddleName = middleName;
+            LastName = lastName;
+            ContactNo = contactNo;
+            Email = email;
+            Address = address;
+            CreatedBy = createdBy;
+            IsActive = isActive;
+        }
     }
 }

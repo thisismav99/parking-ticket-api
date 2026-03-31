@@ -16,4 +16,11 @@
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Common\" />
+    <Folder Include="Employee\" />
+    <Folder Include="Company\" />
+    <Folder Include="Parking\" />
+  </ItemGroup>
+
 </Project>
