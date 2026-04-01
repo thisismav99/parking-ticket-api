@@ -1,9 +1,9 @@
-﻿using Application.Customer.DTO;
+﻿using Application.Applications.Customer.DTO;
 using Infrastructure.Interfaces.Customer;
 using Mapster;
 using MediatR;
 
-namespace Application.Customer.Query
+namespace Application.Applications.Customer.Query
 {
     internal record class GetCustomersQuery(int PageNumber, int PageSize) : IRequest<List<ResponseCustomerDTO>>;
 

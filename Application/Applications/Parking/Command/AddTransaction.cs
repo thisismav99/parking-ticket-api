@@ -4,7 +4,7 @@ using Infrastructure.Interfaces.Parking;
 using MediatR;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Parking.Command
+namespace Application.Applications.Parking.Command
 {
     internal record AddTransactionCommand([Required] decimal AmountToPay,
         [Required] decimal AmountPaid,

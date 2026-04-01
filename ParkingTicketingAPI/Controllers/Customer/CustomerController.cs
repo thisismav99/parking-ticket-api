@@ -1,6 +1,6 @@
-﻿using Application.Customer.Command;
-using Application.Customer.DTO;
-using Application.Customer.Query;
+﻿using Application.Applications.Customer.DTO;
+using Application.Applications.Customer.Command;
+using Application.Applications.Customer.Query;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ParkingTicketingAPI.Utilities.Helpers;
@@ -58,15 +58,9 @@ namespace ParkingTicketingAPI.Controllers.Customer
                 addCustomerDTO.LastName,
                 addCustomerDTO.ContactNo,
                 addCustomerDTO.Email,
-                addCustomerDTO.LotNo,
-                addCustomerDTO.Street,
-                addCustomerDTO.Barangay,
-                addCustomerDTO.Municipality,
-                addCustomerDTO.Region,
-                addCustomerDTO.Country,
+                addCustomerDTO.AddressId,
                 addCustomerDTO.CreatedBy,
-                addCustomerDTO.IsActive
-            );
+                addCustomerDTO.IsActive);
 
             var result = await _mediator.Send(command, cancellationToken);
 

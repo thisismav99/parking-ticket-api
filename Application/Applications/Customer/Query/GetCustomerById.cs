@@ -1,10 +1,10 @@
-﻿using Application.Customer.DTO;
+﻿using Application.Applications.Customer.DTO;
 using CSharpFunctionalExtensions;
 using Infrastructure.Interfaces.Customer;
 using Mapster;
 using MediatR;
 
-namespace Application.Customer.Query
+namespace Application.Applications.Customer.Query
 {
     internal record class GetCustomerByIdQuery(Guid CustomerId) : IRequest<Result<ResponseCustomerDTO?>>;
 

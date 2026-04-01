@@ -1,7 +1,7 @@
 ﻿using Domain.Entities.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Persistence.Extensions;
+using Persistence.Utilities.Extensions;
 
 namespace Persistence.Configurations.Common
 {

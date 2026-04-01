@@ -1,6 +1,6 @@
-﻿using Application.Parking.Command;
-using Application.Parking.DTO;
-using Application.Parking.Query;
+﻿using Application.Applications.Parking.DTO;
+using Application.Applications.Parking.Command;
+using Application.Applications.Parking.Query;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ParkingTicketingAPI.Utilities.Helpers;
@@ -57,7 +57,7 @@ namespace ParkingTicketingAPI.Controllers.Parking
                 addTransactionDTO.AmountPaid,
                 addTransactionDTO.IsCard,
                 addTransactionDTO.IsCash,
-                addTransactionDTO.CreateadBy,
+                addTransactionDTO.CreatedBy,
                 addTransactionDTO.IsActive);
 
             var result = await _mediator.Send(command, cancellationToken);

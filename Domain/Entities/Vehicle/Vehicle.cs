@@ -24,7 +24,15 @@ namespace Domain.Entities.Vehicle
         private Vehicle() { }
 
         [SetsRequiredMembers]
-        public Vehicle(string plateNo, string brand, string? color, string? model, bool isElectric, bool isHybrid, Guid? customerId, string createdBy, bool isActive)
+        public Vehicle(string plateNo, 
+            string brand, 
+            string? color, 
+            string? model, 
+            bool isElectric, 
+            bool isHybrid, Guid? 
+            customerId, 
+            string createdBy, 
+            bool isActive)
         {
             PlateNo = plateNo;
             Brand = brand;

@@ -1,4 +1,4 @@
-﻿namespace Application.Vehicle.DTO
+﻿namespace Application.Applications.Vehicle.DTO
 {
     public class ResponseVehicleDTO
     {

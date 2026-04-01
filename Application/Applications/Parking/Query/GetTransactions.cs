@@ -1,9 +1,9 @@
-﻿using Application.Parking.DTO;
+﻿using Application.Applications.Parking.DTO;
 using Infrastructure.Interfaces.Parking;
 using Mapster;
 using MediatR;
 
-namespace Application.Parking.Query
+namespace Application.Applications.Parking.Query
 {
     internal record class GetTransactionsQuery(int PageNumber, int PageSize) : IRequest<List<ResponseTransactionDTO>>;
 

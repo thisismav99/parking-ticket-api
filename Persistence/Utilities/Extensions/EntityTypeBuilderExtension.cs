@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Persistence.Extensions
+namespace Persistence.Utilities.Extensions
 {
     internal static class EntityTypeBuilderExtension
     {

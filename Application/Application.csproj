@@ -17,10 +17,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Common\" />
-    <Folder Include="Employee\" />
-    <Folder Include="Company\" />
-    <Folder Include="Parking\" />
+    <Folder Include="Applications\Common\" />
+    <Folder Include="Applications\Employee\" />
+    <Folder Include="Applications\Company\" />
+    <Folder Include="Applications\Parking\" />
   </ItemGroup>
 
 </Project>

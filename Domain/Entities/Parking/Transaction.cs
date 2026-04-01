@@ -18,7 +18,12 @@ namespace Domain.Entities.Parking
         private Transaction() { }
 
         [SetsRequiredMembers]
-        public Transaction(decimal amountToPay, decimal amountPaid, bool isCard, bool isCash, string createdBy, bool isActive)
+        public Transaction(decimal amountToPay, 
+            decimal amountPaid, 
+            bool isCard, 
+            bool isCash, 
+            string createdBy, 
+            bool isActive)
         {
             AmountToPay = amountToPay;
             AmountPaid = amountPaid;

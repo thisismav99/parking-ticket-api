@@ -1,9 +1,9 @@
-﻿using Application.Vehicle.DTO;
+﻿using Application.Applications.Vehicle.DTO;
 using Infrastructure.Interfaces.Vehicle;
 using Mapster;
 using MediatR;
 
-namespace Application.Vehicle.Query
+namespace Application.Applications.Vehicle.Query
 {
     internal record GetVehiclesQuery(int PageNumber, int PageSize) : IRequest<List<ResponseVehicleDTO>>;
 

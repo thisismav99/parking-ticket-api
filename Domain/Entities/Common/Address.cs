@@ -19,7 +19,14 @@ namespace Domain.Entities.Common
         private Address() { }
 
         [SetsRequiredMembers]
-        public Address(int? lotNo, string street, string barangay, string municipality, string region, string country, string createdBy, bool isActive)
+        public Address(int? lotNo, 
+            string street, 
+            string barangay, 
+            string municipality, 
+            string region, 
+            string country, 
+            string createdBy, 
+            bool isActive)
         {
             LotNo = lotNo;
             Street = street;

@@ -4,7 +4,7 @@ using Infrastructure.Interfaces.Vehicle;
 using MediatR;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Vehicle.Command
+namespace Application.Applications.Vehicle.Command
 {
     internal record AddVehicleCommand([Required, MaxLength(10)] string PlateNo,
         [Required, MaxLength(50)] string Brand,

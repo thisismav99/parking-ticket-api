@@ -1,10 +1,10 @@
-﻿using Application.Vehicle.DTO;
+﻿using Application.Applications.Vehicle.DTO;
 using CSharpFunctionalExtensions;
 using Infrastructure.Interfaces.Vehicle;
 using Mapster;
 using MediatR;
 
-namespace Application.Vehicle.Query
+namespace Application.Applications.Vehicle.Query
 {
     internal record GetVehicleByIdQuery(Guid VehicleId) : IRequest<Result<ResponseVehicleDTO?>>;
     

@@ -1,4 +1,4 @@
-﻿namespace Application.Parking.DTO
+﻿namespace Application.Applications.Parking.DTO
 {
     public class ResponseTransactionDTO
     {

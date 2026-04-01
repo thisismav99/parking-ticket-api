@@ -1,6 +1,8 @@
-﻿namespace Application.Customer.DTO
+﻿using Application.DTO;
+
+namespace Application.Applications.Customer.DTO
 {
-    public class ResponseCustomerDTO
+    public class AddCustomerDTO : BaseDTO
     {
         public required string FirstName { get; set; }
 

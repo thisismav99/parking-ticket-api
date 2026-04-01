@@ -1,6 +1,8 @@
-﻿namespace Application.Parking.DTO
+﻿using Application.DTO;
+
+namespace Application.Applications.Parking.DTO
 {
-    public class AddTransactionDTO
+    public class AddTransactionDTO : BaseDTO
     {
         public decimal AmountToPay { get; set; }
 
@@ -9,9 +11,5 @@
         public bool IsCard { get; set; }
 
         public bool IsCash { get; set; }
-
-        public required string CreateadBy { get; set; }
-
-        public bool IsActive { get; set; }
     }
 }

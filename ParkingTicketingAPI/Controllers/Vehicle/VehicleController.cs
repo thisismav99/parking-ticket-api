@@ -1,6 +1,6 @@
-﻿using Application.Vehicle.Command;
-using Application.Vehicle.DTO;
-using Application.Vehicle.Query;
+﻿using Application.Applications.Vehicle.DTO;
+using Application.Applications.Vehicle.Command;
+using Application.Applications.Vehicle.Query;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ParkingTicketingAPI.Utilities.Helpers;

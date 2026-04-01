@@ -1,10 +1,10 @@
-﻿using Application.Parking.DTO;
+﻿using Application.Applications.Parking.DTO;
 using CSharpFunctionalExtensions;
 using Infrastructure.Interfaces.Parking;
 using Mapster;
 using MediatR;
 
-namespace Application.Parking.Query
+namespace Application.Applications.Parking.Query
 {
     internal record class GetTransactionByIdQuery(Guid TransactionId) : IRequest<Result<ResponseTransactionDTO?>>;
 

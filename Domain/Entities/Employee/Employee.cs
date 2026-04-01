@@ -14,8 +14,8 @@ namespace Domain.Entities.Employee
 
         public Guid CompanyId { get; set; }
 
-        public required Address Address { get; set; }
+        public Address? Address { get; set; }
 
-        public required Company.Company Company { get; set; }
+        public Company.Company? Company { get; set; }
     }
 }

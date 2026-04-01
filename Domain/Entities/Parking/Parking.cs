@@ -16,10 +16,10 @@ namespace Domain.Entities.Parking
 
         public Guid TransactionId { get; set; }
 
-        public required Vehicle.Vehicle Vehicle { get; set; }
+        public Vehicle.Vehicle? Vehicle { get; set; }
 
-        public required Employee.Employee Employee { get; set; }
+        public Employee.Employee? Employee { get; set; }
 
-        public required Transaction Transaction { get; set; }
+        public Transaction? Transaction { get; set; }
     }
 }

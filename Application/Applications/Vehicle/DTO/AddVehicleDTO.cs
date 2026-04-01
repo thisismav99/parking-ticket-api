@@ -1,6 +1,8 @@
-﻿namespace Application.Vehicle.DTO
+﻿using Application.DTO;
+
+namespace Application.Applications.Vehicle.DTO
 {
-    public class AddVehicleDTO
+    public class AddVehicleDTO : BaseDTO
     {
         public required string PlateNo { get; set; }
 
@@ -15,9 +17,5 @@
         public bool IsHybrid { get; set; }
 
         public Guid? CustomerId { get; set; }
-
-        public required string CreatedBy { get; set; }
-
-        public bool IsActive { get; set; }
     }
 }
