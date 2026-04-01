@@ -1,4 +1,5 @@
 ﻿using Domain.Entities.Common;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Domain.Entities.Company
 {
@@ -7,5 +8,16 @@ namespace Domain.Entities.Company
         public required string Name { get; set; }
 
         public string? Description { get; set; }
+
+        private Company() { }
+
+        [SetsRequiredMembers]
+        public Company(string name, string? description, string createdBy, bool isActive)
+        {
+            Name = name;
+            Description = description;
+            CreatedBy = createdBy;
+            IsActive = isActive;
+        }
     }
 }
