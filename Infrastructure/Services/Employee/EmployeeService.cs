@@ -18,13 +18,9 @@ namespace Infrastructure.Services.Employee
             _employees = _parkingTicketDbContext.Set<Domain.Entities.Employee.Employee>();
         }
 
-        public async Task<Guid> AddEmployee(Domain.Entities.Employee.Employee employee, 
-            Domain.Entities.Common.Address address,
-            CancellationToken cancellationToken)
+        public async Task<Guid> AddEmployee(Domain.Entities.Employee.Employee employee, CancellationToken cancellationToken)
         {
-            await _employeeaddress.AddAsync(address, cancellationToken);
             await _employees.AddAsync(employee, cancellationToken);
-
             await _parkingTicketDbContext.SaveChangesAsync(cancellationToken);
 
             return employee.Id;

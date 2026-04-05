@@ -1,4 +1,5 @@
 ﻿using Domain.Entities.Common;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Domain.Entities.Employee
 {
@@ -17,5 +18,19 @@ namespace Domain.Entities.Employee
         public Address? Address { get; set; }
 
         public Company.Company? Company { get; set; }
+
+        private Employee() { }
+
+        [SetsRequiredMembers]
+        public Employee(string firstName, string? middleName, string lastName, Guid addressId, Guid companyId, string createdBy, bool isActive)
+        {
+            FirstName = firstName;
+            MiddleName = middleName;
+            LastName = lastName;
+            AddressId = addressId;
+            CompanyId = companyId;
+            CreatedBy = createdBy;
+            IsActive = isActive;
+        }
     }
 }
