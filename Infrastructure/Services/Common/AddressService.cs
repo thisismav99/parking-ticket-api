@@ -17,6 +17,14 @@ namespace Infrastructure.Services.Common
             _addresses = _parkingTicketDbContext.Set<Address>();
         }
 
+        public async Task<Guid> AddAddress(Address address, CancellationToken cancellationToken)
+        {
+            await _addresses.AddAsync(address, cancellationToken);
+            await _parkingTicketDbContext.SaveChangesAsync(cancellationToken);
+
+            return address.Id;
+        }
+
         public async Task DeleteAddress(Guid addressId, CancellationToken cancellationToken)
         {
             var address = await _addresses.FirstOrDefaultAsync(x => x.Id == addressId, cancellationToken);
