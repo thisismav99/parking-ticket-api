@@ -1,5 +1,5 @@
-﻿using Application.Applications.Parking.DTO;
-using Application.Applications.Parking.Command;
+﻿using Application.Applications.Parking.Command;
+using Application.Applications.Parking.DTO;
 using Application.Applications.Parking.Query;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -7,25 +7,24 @@ using ParkingTicketingAPI.Utilities.Helpers;
 
 namespace ParkingTicketingAPI.Controllers.Parking
 {
-    [Route("api/parking/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
-    public class TransactionController : ControllerBase
+    public class ParkingController : ControllerBase
     {
         private readonly IMediator _mediator;
         private readonly LinkGenerator _linkGenerator;
 
-        public TransactionController(IMediator mediator,
+        public ParkingController(IMediator mediator,
             LinkGenerator linkGenerator)
         {
             _mediator = mediator;
             _linkGenerator = linkGenerator;
         }
 
-        [HttpGet("{transactionId:guid}")]
-        public async Task<IActionResult> Get(Guid transactionId,
-            CancellationToken cancellationToken)
+        [HttpGet("{parkingId:guid}")]
+        public async Task<IActionResult> Get(Guid parkingId, CancellationToken cancellationToken)
         {
-            var query = new GetTransactionByIdQuery(transactionId);
+            var query = new GetParkingByIdQuery(parkingId);
 
             var result = await _mediator.Send(query, cancellationToken);
 
@@ -42,7 +41,7 @@ namespace ParkingTicketingAPI.Controllers.Parking
             int pageSize,
             CancellationToken cancellationToken)
         {
-            var query = new GetTransactionsQuery(pageNumber, pageSize);
+            var query = new GetParkingsQuery(pageNumber, pageSize);
 
             var result = await _mediator.Send(query, cancellationToken);
 
@@ -50,15 +49,16 @@ namespace ParkingTicketingAPI.Controllers.Parking
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(AddTransactionDTO addTransactionDTO,
+        public async Task<IActionResult> Post(AddParkingDTO addParkingDTO,
             CancellationToken cancellationToken)
         {
-            var command = new AddTransactionCommand(addTransactionDTO.AmountToPay,
-                addTransactionDTO.AmountPaid,
-                addTransactionDTO.IsCard,
-                addTransactionDTO.IsCash,
-                addTransactionDTO.CreatedBy,
-                addTransactionDTO.IsActive);
+            var command = new AddParkingCommand(addParkingDTO.ParkDateTime,
+                addParkingDTO.ExitDateTime,
+                addParkingDTO.VehicleId,
+                addParkingDTO.EmployeeId,
+                addParkingDTO.TransactionId,
+                addParkingDTO.CreatedBy,
+                addParkingDTO.IsActive);
 
             var result = await _mediator.Send(command, cancellationToken);
 
@@ -69,9 +69,9 @@ namespace ParkingTicketingAPI.Controllers.Parking
 
             var linkGenerator = new Dictionary<string, string?>()
             {
-                { "ById", _linkGenerator.GenerateLink(HttpContext, "Get", "Transaction", result.Value) },
-                { "List",  _linkGenerator.GenerateLink(HttpContext, "Get", "Transaction", null) },
-                { "Self", _linkGenerator.GenerateLink(HttpContext, "Post", "Transaction", null) }
+                { "ById", _linkGenerator.GenerateLink(HttpContext, "Get", "Parking", result.Value) },
+                { "List",  _linkGenerator.GenerateLink(HttpContext, "Get", "Parking", null) },
+                { "Self", _linkGenerator.GenerateLink(HttpContext, "Post", "Parking", null) }
             };
 
             return Ok(linkGenerator);
