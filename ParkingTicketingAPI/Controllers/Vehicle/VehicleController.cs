@@ -22,7 +22,7 @@ namespace ParkingTicketingAPI.Controllers.Vehicle
         }
 
         [HttpGet("{vehicleId:guid}")]
-        public async Task<IActionResult> Get([FromRoute]Guid vehicleId, 
+        public async Task<IActionResult> Get(Guid vehicleId, 
             CancellationToken cancellationToken)
         {
             var query = new GetVehicleByIdQuery(vehicleId);
@@ -38,8 +38,8 @@ namespace ParkingTicketingAPI.Controllers.Vehicle
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get([FromRoute]int pageNumber, 
-            [FromRoute]int pageSize,
+        public async Task<IActionResult> Get(int pageNumber, 
+            int pageSize,
             CancellationToken cancellationToken)
         {
             var query = new GetVehiclesQuery(pageNumber, pageSize);
@@ -50,7 +50,7 @@ namespace ParkingTicketingAPI.Controllers.Vehicle
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]AddVehicleDTO addVehicleDTO, 
+        public async Task<IActionResult> Post(AddVehicleDTO addVehicleDTO, 
             CancellationToken cancellationToken)
         {
             var command = new AddVehicleCommand(addVehicleDTO.PlateNo,
