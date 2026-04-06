@@ -5,7 +5,7 @@ using Persistence;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.RegisterPersistence(builder.Configuration.GetConnectionString("ParkingDb")!);
+builder.Services.RegisterPersistence(builder.Configuration);
 builder.Services.RegisterInfrastructure();
 builder.Services.RegisterApplication();
 
@@ -27,6 +27,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

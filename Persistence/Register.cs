@@ -1,16 +1,74 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Domain.Entities.User;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Persistence.Contexts;
+using System.Text;
 
 namespace Persistence
 {
     public static class Register
     {
-        public static void RegisterPersistence(this IServiceCollection services, string connectionString)
+        public static void RegisterPersistence(this IServiceCollection services,
+            IConfiguration configuration)
         {
-            services.AddDbContext<ParkingTicketDbContext>(options => {
-                options.UseSqlServer(connectionString);
+            DbContexts(services, 
+                configuration.GetConnectionString("ParkingDb")!, 
+                configuration.GetConnectionString("UserDb")!);
+            Identity(services);
+            Jwt(services, configuration);
+        }
+
+        private static void DbContexts(IServiceCollection services,
+            string parkingDbConnectionString,
+            string userDbConnectionString)
+        {
+            services.AddDbContext<ParkingTicketDbContext>(options =>
+            {
+                options.UseSqlServer(parkingDbConnectionString);
             });
+
+            services.AddDbContext<UserDbContext>(options =>
+            {
+                options.UseSqlServer(userDbConnectionString);
+            });
+        }
+
+        private static void Identity(IServiceCollection services)
+        {
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<UserDbContext>()
+                .AddDefaultTokenProviders();
+        }
+
+        private static void Jwt(IServiceCollection services, IConfiguration configuration)
+        {
+            var jwt = configuration.GetSection("Jwt");
+            var key = Encoding.UTF8.GetBytes(jwt["Key"]!);
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwt["Issuer"],
+                    ValidAudience = jwt["Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(key)
+                };
+            });
+
+            services.AddAuthorization();
         }
     }
 }

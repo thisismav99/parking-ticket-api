@@ -12,7 +12,7 @@ namespace Persistence.Configurations.Company
             builder.Property(x => x.Name).IsRequired().HasMaxLength(100);
             builder.Property(x => x.Description).IsRequired(false).HasMaxLength(500);
 
-            builder.ToTable("Company", "company");
+            builder.ToTable("Company", "parking");
         }
     }
 }
