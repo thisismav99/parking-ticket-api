@@ -39,7 +39,7 @@ namespace Persistence
 
         private static void Identity(IServiceCollection services)
         {
-            services.AddIdentity<User, IdentityRole>()
+            services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<UserDbContext>()
                 .AddDefaultTokenProviders();
         }

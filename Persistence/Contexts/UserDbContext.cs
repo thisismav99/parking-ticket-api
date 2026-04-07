@@ -12,7 +12,8 @@ namespace Persistence.Contexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new UserEmployeeConfiguration());
+            modelBuilder.Entity<IdentityUser>().ToTable("Users", "user");
             modelBuilder.Entity<IdentityRole>().ToTable("Roles", "user");
             modelBuilder.Entity<IdentityUserRole<string>>().ToTable("UserRoles", "user");
             modelBuilder.Entity<IdentityUserClaim<string>>().ToTable("UserClaims", "user");

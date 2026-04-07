@@ -78,7 +78,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Address", "common");
+                    b.ToTable("Address", "parking");
                 });
 
             modelBuilder.Entity("Domain.Entities.Company.Company", b =>
@@ -118,7 +118,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Company", "company");
+                    b.ToTable("Company", "parking");
                 });
 
             modelBuilder.Entity("Domain.Entities.Customer.Customer", b =>
@@ -176,7 +176,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("AddressId");
 
-                    b.ToTable("Customers", "customer");
+                    b.ToTable("Customers", "parking");
                 });
 
             modelBuilder.Entity("Domain.Entities.Employee.Employee", b =>
@@ -231,7 +231,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("Employees", "employee");
+                    b.ToTable("Employees", "parking");
                 });
 
             modelBuilder.Entity("Domain.Entities.Parking.Parking", b =>
@@ -399,7 +399,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Vehicles", "vehicle");
+                    b.ToTable("Vehicles", "parking");
                 });
 
             modelBuilder.Entity("Domain.Entities.Customer.Customer", b =>
