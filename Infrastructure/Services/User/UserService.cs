@@ -3,6 +3,7 @@ using Infrastructure.Utilities.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Contexts;
+using System.Security.Claims;
 
 namespace Infrastructure.Services.User
 {
@@ -29,7 +30,7 @@ namespace Infrastructure.Services.User
             
             if(user.Errors.Any())
             {
-                return (null, user.Errors.Select(e => $"Error Code: {e.Code} - {e.Description}").ToList());
+                return (null, user.Errors.Select(e => GetError.Error(e.Code, e.Description)).ToList());
             }
 
             var userEmployee = new Domain.Entities.User.UserEmployee
@@ -42,6 +43,42 @@ namespace Infrastructure.Services.User
             await _userDbContext.SaveChangesAsync(cancellationToken);
 
             return (identityUser.Id, null);
+        }
+
+        public async Task<(string?, List<string>?)> AssignUserClaim(string email, string claimType, string claimValue)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user is not null)
+            {
+                var userClaim = await _userManager.AddClaimAsync(user, new Claim(claimType, claimValue));
+                if (userClaim.Errors.Any())
+                {
+                    return (null, userClaim.Errors.Select(e => GetError.Error(e.Code, e.Description)).ToList());
+                }
+                return (user.Id, null);
+            }
+
+            return (null, new List<string>() { GetError.Error(string.Empty, $"{email} not found") });
+        }
+
+        public async Task<(string?, List<string>?)> AssignUserRole(string email, string role)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user is not null)
+            {
+                var userRole = await _userManager.AddToRoleAsync(user, role);
+
+                if (userRole.Errors.Any())
+                {
+                    return (null, userRole.Errors.Select(e => GetError.Error(e.Code, e.Description)).ToList());
+                }
+
+                return (user.Id, null);
+            }
+
+            return (null, new List<string>() { GetError.Error(string.Empty, $"{email} not found") });
         }
 
         public async Task<IdentityUser?> GetIdentityUserByEmail(string email, CancellationToken cancellationToken)
