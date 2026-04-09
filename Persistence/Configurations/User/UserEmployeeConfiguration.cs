@@ -9,7 +9,7 @@ namespace Persistence.Configurations.User
         {
             builder.HasNoKey();
             builder.Property(x => x.UserId).IsRequired();
-            builder.Property(x => x.EmployeeId).IsRequired(false);
+            builder.Property(x => x.EmployeeId).IsRequired();
 
             builder.HasOne(x => x.IdentityUser).WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
 
