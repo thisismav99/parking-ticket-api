@@ -1,4 +1,5 @@
-﻿using Infrastructure.Interfaces.User;
+﻿using CSharpFunctionalExtensions;
+using Infrastructure.Interfaces.User;
 using Infrastructure.Utilities.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +22,7 @@ namespace Infrastructure.Services.User
             _userEmployees = _userDbContext.Set<Domain.Entities.User.UserEmployee>();
         }
 
-        public async Task<(string?, List<string>?)> AddUser(IdentityUser identityUser, 
+        public async Task<Result<string>> AddUser(IdentityUser identityUser, 
             string password,
             Guid employeeId, 
             CancellationToken cancellationToken)
@@ -30,7 +31,8 @@ namespace Infrastructure.Services.User
             
             if(user.Errors.Any())
             {
-                return (null, user.Errors.Select(e => GetError.Error(e.Code, e.Description)).ToList());
+                var errors = user.Errors.Select(e => GetError.Error(e.Code, e.Description)).ToList();
+                return Result.Failure<string>(string.Join(", ", errors));
             }
 
             var userEmployee = new Domain.Entities.User.UserEmployee
@@ -42,27 +44,30 @@ namespace Infrastructure.Services.User
             await _userEmployees.AddAsync(userEmployee, cancellationToken);
             await _userDbContext.SaveChangesAsync(cancellationToken);
 
-            return (identityUser.Id, null);
+            return Result.Success(identityUser.Id);
         }
 
-        public async Task<(string?, List<string>?)> AssignUserClaim(string email, string claimType, string claimValue)
+        public async Task<Result<string>> AssignUserClaim(string email, string claimType, string claimValue)
         {
             var user = await _userManager.FindByEmailAsync(email);
 
             if (user is not null)
             {
                 var userClaim = await _userManager.AddClaimAsync(user, new Claim(claimType, claimValue));
+
                 if (userClaim.Errors.Any())
                 {
-                    return (null, userClaim.Errors.Select(e => GetError.Error(e.Code, e.Description)).ToList());
+                    var errors = userClaim.Errors.Select(e => GetError.Error(e.Code, e.Description)).ToList();
+                    return Result.Failure<string>(string.Join(", ", errors));
                 }
-                return (user.Id, null);
+
+                return Result.Success(user.Id);
             }
 
-            return (null, new List<string>() { GetError.Error(string.Empty, $"{email} not found") });
+            return Result.Failure<string>(GetError.Error(string.Empty, $"{email} not found"));
         }
 
-        public async Task<(string?, List<string>?)> AssignUserRole(string email, string role)
+        public async Task<Result<string>> AssignUserRole(string email, string role)
         {
             var user = await _userManager.FindByEmailAsync(email);
 
@@ -72,13 +77,14 @@ namespace Infrastructure.Services.User
 
                 if (userRole.Errors.Any())
                 {
-                    return (null, userRole.Errors.Select(e => GetError.Error(e.Code, e.Description)).ToList());
+                    var errors = userRole.Errors.Select(e => GetError.Error(e.Code, e.Description)).ToList();
+                    return Result.Failure<string>(string.Join(", ", errors));
                 }
 
-                return (user.Id, null);
+                return Result.Success(user.Id);
             }
 
-            return (null, new List<string>() { GetError.Error(string.Empty, $"{email} not found") });
+            return Result.Failure<string>(GetError.Error(string.Empty, $"{email} not found"));
         }
 
         public async Task<IdentityUser?> GetIdentityUserByEmail(string email, CancellationToken cancellationToken)

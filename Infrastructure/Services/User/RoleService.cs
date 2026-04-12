@@ -1,4 +1,5 @@
-﻿using Infrastructure.Interfaces.User;
+﻿using CSharpFunctionalExtensions;
+using Infrastructure.Interfaces.User;
 using Infrastructure.Utilities.Helpers;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
@@ -14,7 +15,7 @@ namespace Infrastructure.Services.User
             _roleManager = roleManager;
         }
 
-        public async Task<(string?, List<string>?)> AddRole(string role)
+        public async Task<Result<string>> AddRole(string role)
         {
             bool roleExists = await _roleManager.RoleExistsAsync(role);
 
@@ -30,16 +31,17 @@ namespace Infrastructure.Services.User
 
                 if (result.Errors.Any())
                 {
-                    return (null, result.Errors.Select(e => GetError.Error(e.Code, e.Description)).ToList());
+                    var errors = result.Errors.Select(e => GetError.Error(e.Code, e.Description)).ToList();
+                    return Result.Failure<string>(string.Join(", ", errors));
                 }
 
-                return (identityRole.Id, null);
+                return Result.Success(identityRole.Id);
             }
 
-            return (null, new List<string>(){ GetError.Error(string.Empty, $"{role} already exists") });
+            return Result.Failure<string>(GetError.Error(string.Empty, $"{role} already exists"));
         }
 
-        public async Task<(string?, List<string>?)> AddRoleClaim(string role, string claimType, string claimValue)
+        public async Task<Result<string>> AddRoleClaim(string role, string claimType, string claimValue)
         {
             var roleEntity = await _roleManager.FindByNameAsync(role);
 
@@ -49,13 +51,14 @@ namespace Infrastructure.Services.User
 
                 if (roleClaim.Errors.Any())
                 {
-                    return (null, roleClaim.Errors.Select(e => GetError.Error(e.Code, e.Description)).ToList());
+                    var errors = roleClaim.Errors.Select(e => GetError.Error(e.Code, e.Description)).ToList();
+                    return Result.Failure<string>(string.Join(", ", errors));
                 }
 
-                return (roleEntity.Id, null);
+                return Result.Success(roleEntity.Id);
             }
 
-            return (null, new List<string>() { GetError.Error(string.Empty, $"{role} not found") });
+            return Result.Failure<string>(GetError.Error(string.Empty, $"{role} not found"));
         }
     }
 }

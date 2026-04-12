@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using CSharpFunctionalExtensions;
+using Microsoft.AspNetCore.Identity;
 
 namespace Infrastructure.Interfaces.User
 {
     internal interface IUserService
     {
-        Task<(string?, List<string>?)> AddUser(IdentityUser identityUser, 
+        Task<Result<string>> AddUser(IdentityUser identityUser, 
             string password, 
             Guid employeeId, 
             CancellationToken cancellationToken);
@@ -13,8 +14,8 @@ namespace Infrastructure.Interfaces.User
 
         Task<List<IdentityUser>> GetIdentityUsers(int pageNumber, int pageSize, CancellationToken cancellationToken);
 
-        Task<(string?, List<string>?)> AssignUserRole(string email, string role);
+        Task<Result<string>> AssignUserRole(string email, string role);
 
-        Task<(string?, List<string>?)> AssignUserClaim(string email, string claimType, string claimValue);
+        Task<Result<string>> AssignUserClaim(string email, string claimType, string claimValue);
     }
 }
