@@ -1,4 +1,5 @@
 ﻿using Application.Applications.Common.DTO;
+using Application.Utilities.Helpers;
 using CSharpFunctionalExtensions;
 using Infrastructure.Interfaces.Common;
 using Mapster;
@@ -23,7 +24,7 @@ namespace Application.Applications.Common.Query
 
             if(address is null)
             {
-                return Result.Failure<ResponseAddressDTO?>($"No address found for Id: {request.AddressId}");
+                return Result.Failure<ResponseAddressDTO?>(GetError.NotFound(request.AddressId));
             }
 
             ResponseAddressDTO? addressDTO = address.Adapt<ResponseAddressDTO?>();

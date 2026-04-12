@@ -1,4 +1,5 @@
 ﻿using Application.Applications.Customer.DTO;
+using Application.Utilities.Helpers;
 using CSharpFunctionalExtensions;
 using Infrastructure.Interfaces.Customer;
 using Mapster;
@@ -23,7 +24,7 @@ namespace Application.Applications.Customer.Query
 
             if (customer is null)
             {
-                return Result.Failure<ResponseCustomerDTO?>($"No customer found for Id: {request.CustomerId}");
+                return Result.Failure<ResponseCustomerDTO?>(GetError.NotFound(request.CustomerId));
             }
 
             ResponseCustomerDTO? customerDTO = customer.Adapt<ResponseCustomerDTO?>();

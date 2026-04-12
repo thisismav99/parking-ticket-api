@@ -53,14 +53,7 @@ namespace ParkingTicketingAPI.Controllers.Customer
         public async Task<IActionResult> Post(AddCustomerDTO addCustomerDTO,
             CancellationToken cancellationToken)
         {
-            var command = new AddCustomerCommand(addCustomerDTO.FirstName,
-                addCustomerDTO.MiddleName,
-                addCustomerDTO.LastName,
-                addCustomerDTO.ContactNo,
-                addCustomerDTO.Email,
-                addCustomerDTO.AddressId,
-                addCustomerDTO.CreatedBy,
-                addCustomerDTO.IsActive);
+            var command = new AddCustomerCommand(addCustomerDTO);
 
             var result = await _mediator.Send(command, cancellationToken);
 

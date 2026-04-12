@@ -1,18 +1,12 @@
-﻿using Application.Utilities.Extensions;
+﻿using Application.Applications.Parking.DTO;
+using Application.Utilities.Helpers;
 using CSharpFunctionalExtensions;
 using Infrastructure.Interfaces.Parking;
 using MediatR;
-using System.ComponentModel.DataAnnotations;
 
 namespace Application.Applications.Parking.Command
 {
-    internal record class AddParkingCommand([Required] DateTime ParkingDateTime,
-        DateTime? ExitDateTime,
-        [Required] Guid VehicleId,
-        [Required] Guid EmployeeId,
-        [Required] Guid TransactionId,
-        [Required, MaxLength(50)] string CreatedBy,
-        [Required] bool IsActive) : IRequest<Result<Guid>>;
+    internal record class AddParkingCommand(AddParkingDTO AddParkingDTO) : IRequest<Result<Guid>>;
 
     internal class AddParkingCommandHandler : IRequestHandler<AddParkingCommand, Result<Guid>>
     {
@@ -25,30 +19,19 @@ namespace Application.Applications.Parking.Command
 
         public async Task<Result<Guid>> Handle(AddParkingCommand request, CancellationToken cancellationToken)
         {
-            var errors = ValidatorHelper<AddParkingCommand>.Errors(request);
-            bool hasErrors = !string.IsNullOrEmpty(errors);
-
-            if (hasErrors)
-            {
-                return Result.Failure<Guid>(errors);
-            }
-
-            var parking = new Domain.Entities.Parking.Parking
-            {
-                ParkDateTime = request.ParkingDateTime,
-                ExitDateTime = request.ExitDateTime,
-                VehicleId = request.VehicleId,
-                EmployeeId = request.EmployeeId,
-                TransactionId = request.TransactionId,
-                CreatedBy = request.CreatedBy,
-                IsActive = request.IsActive
-            };
+            var parking = new Domain.Entities.Parking.Parking(request.AddParkingDTO.ParkDateTime,
+                request.AddParkingDTO.ExitDateTime,
+                request.AddParkingDTO.VehicleId,
+                request.AddParkingDTO.EmployeeId,
+                request.AddParkingDTO.TransactionId,
+                request.AddParkingDTO.CreatedBy,
+                request.AddParkingDTO.IsActive);
 
             var result = await _parkingService.AddParking(parking, cancellationToken);
 
             if (result == Guid.Empty)
             {
-                return Result.Failure<Guid>("Failed to add parking.");
+                return Result.Failure<Guid>(GetError.Error("parking"));
             }
 
             return Result.Success(result);

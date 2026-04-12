@@ -1,4 +1,5 @@
 ﻿using Application.Applications.Parking.DTO;
+using Application.Utilities.Helpers;
 using CSharpFunctionalExtensions;
 using Infrastructure.Interfaces.Parking;
 using Mapster;
@@ -23,7 +24,7 @@ namespace Application.Applications.Parking.Query
 
             if(parking is null)
             {
-                return Result.Failure<ResponseParkingDTO?>($"No parking found for Id: {request.ParkingId}");
+                return Result.Failure<ResponseParkingDTO?>(GetError.NotFound(request.ParkingId));
             }
 
             ResponseParkingDTO? parkingDTO = parking.Adapt<ResponseParkingDTO?>();

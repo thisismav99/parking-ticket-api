@@ -1,4 +1,5 @@
 ﻿using Domain.Entities.Common;
+using Domain.Utilities.CustomException;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Domain.Entities.Customer
@@ -35,10 +36,30 @@ namespace Domain.Entities.Customer
             MiddleName = middleName;
             LastName = lastName;
             ContactNo = contactNo;
-            Email = email;
-            AddressId = addressId;
+            SetEmail(email);
+            SetAddressId(addressId);
             CreatedBy = createdBy;
             IsActive = isActive;
+        }
+
+        private void SetEmail(string? email)
+        {
+            if (!string.IsNullOrEmpty(email) && !email.Contains('@'))
+            {
+                throw new DomainException("Invalid email format.");
+            }
+
+            Email = email;
+        } 
+
+        private void SetAddressId(Guid addressId)
+        {
+            if (addressId == Guid.Empty)
+            {
+                throw new DomainException("AddressId cannot be empty.");
+            }
+
+            AddressId = addressId;
         }
     }
 }

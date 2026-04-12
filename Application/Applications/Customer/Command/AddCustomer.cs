@@ -1,19 +1,12 @@
-﻿using Application.Utilities.Extensions;
+﻿using Application.Applications.Customer.DTO;
+using Application.Utilities.Helpers;
 using CSharpFunctionalExtensions;
 using Infrastructure.Interfaces.Customer;
 using MediatR;
-using System.ComponentModel.DataAnnotations;
 
 namespace Application.Applications.Customer.Command
 {
-    internal record AddCustomerCommand([Required, MaxLength(50)] string FirstName,
-        [MaxLength(50)] string? MiddleName,
-        [Required, MaxLength(50)] string LastName,
-        [MaxLength(15)] string? ContactNo,
-        [MaxLength(100)] string? Email,
-        [Required] Guid AddressId,
-        [Required, MaxLength(100)] string CreatedBy,
-        [Required] bool IsActive) : IRequest<Result<Guid>>;
+    internal record AddCustomerCommand(AddCustomerDTO AddCustomerDTO) : IRequest<Result<Guid>>;
 
     internal class AddCustomerCommandHandler : IRequestHandler<AddCustomerCommand, Result<Guid>>
     {
@@ -26,28 +19,20 @@ namespace Application.Applications.Customer.Command
 
         public async Task<Result<Guid>> Handle(AddCustomerCommand request, CancellationToken cancellationToken)
         {
-            var errors = ValidatorHelper<AddCustomerCommand>.Errors(request);
-            bool hasErrors = !string.IsNullOrEmpty(errors);
-
-            if (hasErrors)
-            {
-                return Result.Failure<Guid>(errors);
-            }
-
-            var customer = new Domain.Entities.Customer.Customer(request.FirstName,
-                request.MiddleName,
-                request.LastName,
-                request.ContactNo,
-                request.Email,
-                request.AddressId,
-                request.CreatedBy,
-                request.IsActive);
+            var customer = new Domain.Entities.Customer.Customer(request.AddCustomerDTO.FirstName,
+                request.AddCustomerDTO.MiddleName,
+                request.AddCustomerDTO.LastName,
+                request.AddCustomerDTO.ContactNo,
+                request.AddCustomerDTO.Email,
+                request.AddCustomerDTO.AddressId,
+                request.AddCustomerDTO.CreatedBy,
+                request.AddCustomerDTO.IsActive);
 
             var result = await _customerService.AddCustomer(customer, cancellationToken);
 
             if (result == Guid.Empty)
             {
-                return Result.Failure<Guid>("Error saving customer.");
+                return Result.Failure<Guid>(GetError.Error("customer"));
             }
 
             return Result.Success(result);

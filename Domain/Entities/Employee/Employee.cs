@@ -1,4 +1,5 @@
 ﻿using Domain.Entities.Common;
+using Domain.Utilities.CustomException;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Domain.Entities.Employee
@@ -27,10 +28,28 @@ namespace Domain.Entities.Employee
             FirstName = firstName;
             MiddleName = middleName;
             LastName = lastName;
-            AddressId = addressId;
-            CompanyId = companyId;
+            SetAddressId(addressId);
+            SetCompanyId(companyId);
             CreatedBy = createdBy;
             IsActive = isActive;
+        }
+
+        private void SetAddressId(Guid addressId)
+        {
+            if (addressId == Guid.Empty)
+            {
+                throw new DomainException("AddressId cannot be empty.");
+            }
+            AddressId = addressId;
+        }
+
+        private void SetCompanyId(Guid companyId)
+        {
+            if (companyId == Guid.Empty)
+            {
+                throw new DomainException("CompanyId cannot be empty.");
+            }
+            CompanyId = companyId;
         }
     }
 }

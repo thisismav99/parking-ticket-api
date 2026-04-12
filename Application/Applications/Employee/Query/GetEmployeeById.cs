@@ -1,4 +1,5 @@
 ﻿using Application.Applications.Employee.DTO;
+using Application.Utilities.Helpers;
 using CSharpFunctionalExtensions;
 using Infrastructure.Interfaces.Employee;
 using Mapster;
@@ -23,7 +24,7 @@ namespace Application.Applications.Employee.Query
 
             if(employee is null)
             {
-                return Result.Failure<ResponseEmployeeDTO?>($"No employee found for Id: {request.EmployeeId}");
+                return Result.Failure<ResponseEmployeeDTO?>(GetError.NotFound(request.EmployeeId));
             }
 
             ResponseEmployeeDTO? employeeDTO = employee.Adapt<ResponseEmployeeDTO?>();

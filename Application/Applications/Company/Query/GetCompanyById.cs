@@ -1,4 +1,5 @@
 ﻿using Application.Applications.Company.DTO;
+using Application.Utilities.Helpers;
 using CSharpFunctionalExtensions;
 using Infrastructure.Interfaces.Company;
 using Mapster;
@@ -23,7 +24,7 @@ namespace Application.Applications.Company.Query
 
             if (company is null)
             {
-                return Result.Failure<ResponseCompanyDTO?>($"No company found for Id: {request.CompanyId}");
+                return Result.Failure<ResponseCompanyDTO?>(GetError.NotFound(request.CompanyId));
             }
 
             ResponseCompanyDTO? companyDTO = company.Adapt<ResponseCompanyDTO?>();

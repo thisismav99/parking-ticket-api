@@ -1,4 +1,5 @@
 ﻿using Application.Applications.Parking.DTO;
+using Application.Utilities.Helpers;
 using CSharpFunctionalExtensions;
 using Infrastructure.Interfaces.Parking;
 using Mapster;
@@ -23,7 +24,7 @@ namespace Application.Applications.Parking.Query
 
             if(transaction is null)
             {
-                return Result.Failure<ResponseTransactionDTO?>($"No transaction found for Id: {request.TransactionId}");
+                return Result.Failure<ResponseTransactionDTO?>(GetError.NotFound(request.TransactionId));
             }
 
             ResponseTransactionDTO? transactionDTO = transaction.Adapt<ResponseTransactionDTO?>();

@@ -1,4 +1,5 @@
 ﻿using Application.Applications.Vehicle.DTO;
+using Application.Utilities.Helpers;
 using CSharpFunctionalExtensions;
 using Infrastructure.Interfaces.Vehicle;
 using Mapster;
@@ -23,7 +24,7 @@ namespace Application.Applications.Vehicle.Query
 
             if(vehicle is null)
             {
-                return Result.Failure<ResponseVehicleDTO?>($"No vehicle found for Id: {request.VehicleId}");
+                return Result.Failure<ResponseVehicleDTO?>(GetError.NotFound(request.VehicleId));
             }
 
             ResponseVehicleDTO? vehicleDTO = vehicle.Adapt<ResponseVehicleDTO?>();
