@@ -61,8 +61,8 @@ namespace ParkingTicketingAPI.Controllers.Employee
             var linkGenerator = new Dictionary<string, string?>()
             {
                 { "ById", _linkGenerator.GenerateLink(HttpContext, "Get", "Employee", result.Value) },
-                { "List",  _linkGenerator.GenerateLink(HttpContext, "Get", "Employee", null) },
-                { "Self", _linkGenerator.GenerateLink(HttpContext, "Post", "Employee", null) }
+                { "List",  _linkGenerator.GenerateLink<string>(HttpContext, "Get", "Employee", null) },
+                { "Self", _linkGenerator.GenerateLink<string>(HttpContext, "Post", "Employee", null) }
             };
 
             return Ok(linkGenerator);

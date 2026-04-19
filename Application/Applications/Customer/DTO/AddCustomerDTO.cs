@@ -14,10 +14,10 @@ namespace Application.Applications.Customer.DTO
         [Required, MaxLength(50)]
         public required string LastName { get; set; }
 
-        [MaxLength(15)]
+        [MaxLength(15), Phone]
         public string? ContactNo { get; set; }
 
-        [MaxLength(100)]
+        [MaxLength(100), EmailAddress]
         public string? Email { get; set; }
 
         [Required]

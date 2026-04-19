@@ -14,8 +14,8 @@ namespace Infrastructure.Interfaces.User
 
         Task<List<IdentityUser>> GetIdentityUsers(int pageNumber, int pageSize, CancellationToken cancellationToken);
 
-        Task<Result<string>> AssignUserRole(string email, string role);
+        Task<Result<string>> AddUserRole(string email, string role);
 
-        Task<Result<string>> AssignUserClaim(string email, string claimType, string claimValue);
+        Task<Result<string>> AddUserClaim(string email, string claimType, string claimValue);
     }
 }

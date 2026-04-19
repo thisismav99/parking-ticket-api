@@ -11,5 +11,10 @@
         {
             return $"No [{id}] id found.";
         }
+
+        public static string NotFound(string identifier)
+        {
+            return $"No [{identifier}] found.";
+        }
     }
 }

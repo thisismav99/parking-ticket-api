@@ -47,7 +47,7 @@ namespace Infrastructure.Services.User
             return Result.Success(identityUser.Id);
         }
 
-        public async Task<Result<string>> AssignUserClaim(string email, string claimType, string claimValue)
+        public async Task<Result<string>> AddUserClaim(string email, string claimType, string claimValue)
         {
             var user = await _userManager.FindByEmailAsync(email);
 
@@ -67,7 +67,7 @@ namespace Infrastructure.Services.User
             return Result.Failure<string>(GetError.Error(string.Empty, $"{email} not found"));
         }
 
-        public async Task<Result<string>> AssignUserRole(string email, string role)
+        public async Task<Result<string>> AddUserRole(string email, string role)
         {
             var user = await _userManager.FindByEmailAsync(email);
 
