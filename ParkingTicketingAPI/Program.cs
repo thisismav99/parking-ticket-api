@@ -1,5 +1,6 @@
 using Application;
 using Infrastructure;
+using ParkingTicketingAPI.Utilities.Extensions;
 using ParkingTicketingAPI.Utilities.Helpers;
 using Persistence;
 
@@ -20,6 +21,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.RateLimiting();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -31,6 +34,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseRateLimiter();
 
 app.UseAuthentication();
 app.UseAuthorization();

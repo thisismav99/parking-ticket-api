@@ -1,24 +1,20 @@
-﻿using Application.Applications.Customer.DTO;
-using Application.Applications.Customer.Command;
+﻿using Application.Applications.Customer.Command;
+using Application.Applications.Customer.DTO;
 using Application.Applications.Customer.Query;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ParkingTicketingAPI.Utilities.Helpers;
+using ParkingTicketingAPI.Utilities.Enums;
 
 namespace ParkingTicketingAPI.Controllers.Customer
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class CustomerController : ControllerBase
+    public class CustomerController : ApiBaseController
     {
         private readonly IMediator _mediator;
-        private readonly LinkGenerator _linkGenerator;
 
         public CustomerController(IMediator mediator,
-            LinkGenerator linkGenerator)
+            LinkGenerator linkGenerator) : base(linkGenerator)
         {
             _mediator = mediator;
-            _linkGenerator = linkGenerator;
         }
 
         [HttpGet("{customerId:guid}")]
@@ -62,14 +58,12 @@ namespace ParkingTicketingAPI.Controllers.Customer
                 return BadRequest(result.Error);
             }
 
-            var linkGenerator = new Dictionary<string, string?>()
-            {
-                { "ById", _linkGenerator.GenerateLink(HttpContext, "Get", "Transaction", result.Value) },
-                { "List",  _linkGenerator.GenerateLink <string>(HttpContext, "Get", "Transaction", null) },
-                { "Self", _linkGenerator.GenerateLink<string>(HttpContext, "Post", "Transaction", null) }
-            };
-
-            return Ok(linkGenerator);
+            return CreatedAtPostResponse(
+            [
+                LinkKeys.ById,
+                LinkKeys.List,
+                LinkKeys.Self
+            ], result.Value);
         }
     }
 }

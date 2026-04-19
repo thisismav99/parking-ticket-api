@@ -1,24 +1,21 @@
-﻿using Application.Applications.Vehicle.DTO;
-using Application.Applications.Vehicle.Command;
+﻿using Application.Applications.Vehicle.Command;
+using Application.Applications.Vehicle.DTO;
 using Application.Applications.Vehicle.Query;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using ParkingTicketingAPI.Utilities.Enums;
 using ParkingTicketingAPI.Utilities.Helpers;
 
 namespace ParkingTicketingAPI.Controllers.Vehicle
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class VehicleController : ControllerBase
+    public class VehicleController : ApiBaseController
     {
         private readonly IMediator _mediator;
-        private readonly LinkGenerator _linkGenerator;
 
         public VehicleController(IMediator mediator, 
-            LinkGenerator linkGenerator)
+            LinkGenerator linkGenerator) : base(linkGenerator)
         {
             _mediator = mediator;
-            _linkGenerator = linkGenerator;
         }
 
         [HttpGet("{vehicleId:guid}")]
@@ -62,14 +59,12 @@ namespace ParkingTicketingAPI.Controllers.Vehicle
                 return BadRequest(result.Error);
             }
 
-            var linkGenerator = new Dictionary<string,string?>()
-            {
-                { "ById", _linkGenerator.GenerateLink(HttpContext, "Get", "Vehicle", result.Value) },
-                { "List",  _linkGenerator.GenerateLink<string>(HttpContext, "Get", "Vehicle", null) },
-                { "Self", _linkGenerator.GenerateLink<string>(HttpContext, "Post", "Vehicle", null) }
-            };
-
-            return Ok(linkGenerator);
+            return CreatedAtPostResponse(
+             [
+                LinkKeys.ById,
+                LinkKeys.List,
+                LinkKeys.Self
+             ], result.Value);
         }
     }
 }

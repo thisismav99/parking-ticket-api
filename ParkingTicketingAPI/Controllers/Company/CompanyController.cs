@@ -3,22 +3,18 @@ using Application.Applications.Company.DTO;
 using Application.Applications.Company.Query;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ParkingTicketingAPI.Utilities.Helpers;
+using ParkingTicketingAPI.Utilities.Enums;
 
 namespace ParkingTicketingAPI.Controllers.Company
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class CompanyController : ControllerBase
+    public class CompanyController : ApiBaseController
     {
         private readonly IMediator _mediator;
-        private readonly LinkGenerator _linkGenerator;
 
         public CompanyController(IMediator mediator,
-            LinkGenerator linkGenerator)
+            LinkGenerator linkGenerator) : base(linkGenerator)
         {
             _mediator = mediator;
-            _linkGenerator = linkGenerator;
         }
 
         [HttpGet("{companyId:guid}")]
@@ -62,14 +58,12 @@ namespace ParkingTicketingAPI.Controllers.Company
                 return BadRequest(result.Error);
             }
 
-            var linkGenerator = new Dictionary<string, string?>()
-            {
-                { "ById", _linkGenerator.GenerateLink(HttpContext, "Get", "Company", result.Value) },
-                { "List",  _linkGenerator.GenerateLink<string>(HttpContext, "Get", "Company", null) },
-                { "Self", _linkGenerator.GenerateLink<string>(HttpContext, "Post", "Company", null) }
-            };
-
-            return Ok(linkGenerator);
+            return CreatedAtPostResponse(
+            [
+                LinkKeys.ById,
+                LinkKeys.List,
+                LinkKeys.Self
+            ], result.Value);
         }
     }
 }

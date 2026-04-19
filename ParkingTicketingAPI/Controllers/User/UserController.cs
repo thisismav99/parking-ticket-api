@@ -3,22 +3,18 @@ using Application.Applications.User.DTO;
 using Application.Applications.User.Query;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ParkingTicketingAPI.Utilities.Helpers;
+using ParkingTicketingAPI.Utilities.Enums;
 
 namespace ParkingTicketingAPI.Controllers.User
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class UserController : ControllerBase
+    public class UserController : ApiBaseController
     {
         private readonly IMediator _mediator;
-        private LinkGenerator _linkGenerator;
 
         public UserController(IMediator mediator,
-            LinkGenerator linkGenerator)
+            LinkGenerator linkGenerator) : base(linkGenerator)
         {
             _mediator = mediator;
-            _linkGenerator = linkGenerator;
         }
 
         [HttpGet("{email}")]
@@ -62,16 +58,14 @@ namespace ParkingTicketingAPI.Controllers.User
                 return BadRequest(result.Error);
             }
 
-            var linkGenerator = new Dictionary<string, string?>()
-            {
-                { "ById", _linkGenerator.GenerateLink(HttpContext, "Get", "User", result.Value) },
-                { "List",  _linkGenerator.GenerateLink<string>(HttpContext, "Get", "User", null) },
-                { "Self", _linkGenerator.GenerateLink<string>(HttpContext, "Post", "User", null) },
-                { "AddUserRole", _linkGenerator.GenerateLink<string>(HttpContext, "AddUserRole", "User", null) },
-                { "AddUserClaim", _linkGenerator.GenerateLink<string>(HttpContext, "AddUserClaim", "User", null) }
-            };
-
-            return Ok(linkGenerator);
+            return CreatedAtPostResponse(
+             [
+                LinkKeys.ById,
+                LinkKeys.List,
+                LinkKeys.Self,
+                LinkKeys.AddUserRole,
+                LinkKeys.AddUserClaim
+             ], result.Value);
         }
 
         [HttpPost("/api/[controller]/role")]
@@ -87,16 +81,14 @@ namespace ParkingTicketingAPI.Controllers.User
                 return BadRequest(result.Error);
             }
 
-            var linkGenerator = new Dictionary<string, string?>()
-            {
-                { "ById", _linkGenerator.GenerateLink(HttpContext, "Get", "User", result.Value) },
-                { "List",  _linkGenerator.GenerateLink<string>(HttpContext, "Get", "User", null) },
-                { "AddUser", _linkGenerator.GenerateLink<string>(HttpContext, "Post", "User", null) },
-                { "Self", _linkGenerator.GenerateLink<string>(HttpContext, "AddUserRole", "User", null) },
-                { "AddUserClaim", _linkGenerator.GenerateLink<string>(HttpContext, "AddUserClaim", "User", null) }
-            };
-
-            return Ok(linkGenerator);
+            return CreatedAtPostResponse(
+             [
+                LinkKeys.ById,
+                LinkKeys.List,
+                LinkKeys.Self,
+                LinkKeys.AddUserRole,
+                LinkKeys.AddUserClaim
+             ], result.Value);
         }
 
         [HttpPost("/api/[controller]/claim")]
@@ -112,16 +104,14 @@ namespace ParkingTicketingAPI.Controllers.User
                 return BadRequest(result.Error);
             }
 
-            var linkGenerator = new Dictionary<string, string?>()
-            {
-                { "ById", _linkGenerator.GenerateLink(HttpContext, "Get", "User", result.Value) },
-                { "List",  _linkGenerator.GenerateLink<string>(HttpContext, "Get", "User", null) },
-                { "AddUser", _linkGenerator.GenerateLink<string>(HttpContext, "Post", "User", null) },
-                { "AddUserRole", _linkGenerator.GenerateLink<string>(HttpContext, "AddUserRole", "User", null) },
-                { "Self", _linkGenerator.GenerateLink<string>(HttpContext, "AddUserClaim", "User", null) }
-            };
-
-            return Ok(linkGenerator);
+            return CreatedAtPostResponse(
+             [
+                LinkKeys.ById,
+                LinkKeys.List,
+                LinkKeys.Self,
+                LinkKeys.AddUserRole,
+                LinkKeys.AddUserClaim
+             ], result.Value);
         }
     }
 }

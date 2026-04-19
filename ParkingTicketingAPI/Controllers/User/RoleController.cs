@@ -2,22 +2,18 @@
 using Application.Applications.User.DTO;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ParkingTicketingAPI.Utilities.Helpers;
+using ParkingTicketingAPI.Utilities.Enums;
 
 namespace ParkingTicketingAPI.Controllers.User
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class RoleController : ControllerBase
+    public class RoleController : ApiBaseController
     {
         private readonly IMediator _mediator;
-        private LinkGenerator _linkGenerator;
 
         public RoleController(IMediator mediator,
-            LinkGenerator linkGenerator)
+            LinkGenerator linkGenerator) : base(linkGenerator)
         {
             _mediator = mediator;
-            _linkGenerator = linkGenerator;
         }
 
         [HttpPost]
@@ -33,13 +29,11 @@ namespace ParkingTicketingAPI.Controllers.User
                 return BadRequest(result.Error);
             }
 
-            var linkGenerator = new Dictionary<string, string?>()
-            {
-                { "AddRoleClaim",  _linkGenerator.GenerateLink<string>(HttpContext, "Claim", "Role", null) },
-                { "Self", _linkGenerator.GenerateLink<string>(HttpContext, "Post", "Role", null) }
-            };
-
-            return Ok(linkGenerator);
+            return CreatedAtPostResponse(
+            [
+                LinkKeys.AddRoleClaim,
+                LinkKeys.AddRole
+            ], result.Value);
         }
 
         [HttpPost("/api/[controller]/claim")]
@@ -55,13 +49,11 @@ namespace ParkingTicketingAPI.Controllers.User
                 return BadRequest(result.Error);
             }
 
-            var linkGenerator = new Dictionary<string, string?>()
-            {
-                { "Self",  _linkGenerator.GenerateLink<string>(HttpContext, "Claim", "Role", null) },
-                { "AddRole", _linkGenerator.GenerateLink<string>(HttpContext, "Post", "Role", null) }
-            };
-
-            return Ok(linkGenerator);
+            return CreatedAtPostResponse(
+            [
+                LinkKeys.AddRoleClaim,
+                LinkKeys.AddRole
+            ], result.Value);
         }
     }
 }

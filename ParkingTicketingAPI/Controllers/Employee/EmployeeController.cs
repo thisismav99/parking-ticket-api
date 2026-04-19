@@ -3,22 +3,18 @@ using Application.Applications.Employee.DTO;
 using Application.Applications.Employee.Query;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ParkingTicketingAPI.Utilities.Helpers;
+using ParkingTicketingAPI.Utilities.Enums;
 
 namespace ParkingTicketingAPI.Controllers.Employee
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class EmployeeController : ControllerBase
+    public class EmployeeController : ApiBaseController
     {
         private readonly IMediator _mediator;
-        private readonly LinkGenerator _linkGenerator;
 
         public EmployeeController(IMediator mediator,
-            LinkGenerator linkGenerator)
+            LinkGenerator linkGenerator) : base(linkGenerator)
         {
             _mediator = mediator;
-            _linkGenerator = linkGenerator;
         }
 
         [HttpGet("{employeeId:guid}")]
@@ -58,14 +54,12 @@ namespace ParkingTicketingAPI.Controllers.Employee
                 return BadRequest(result.Error);
             }
 
-            var linkGenerator = new Dictionary<string, string?>()
-            {
-                { "ById", _linkGenerator.GenerateLink(HttpContext, "Get", "Employee", result.Value) },
-                { "List",  _linkGenerator.GenerateLink<string>(HttpContext, "Get", "Employee", null) },
-                { "Self", _linkGenerator.GenerateLink<string>(HttpContext, "Post", "Employee", null) }
-            };
-
-            return Ok(linkGenerator);
+            return CreatedAtPostResponse(
+            [
+                LinkKeys.ById,
+                LinkKeys.List,
+                LinkKeys.Self
+            ], result.Value);
         }
     }
 }
