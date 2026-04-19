@@ -363,3 +363,5 @@ MigrationBackup/
 FodyWeavers.xsd
 /ParkingTicketingAPI/appsettings.json
 /ParkingTicketingAPI/appsettings.Development.json
+/ParkingTicketingAPI/.env.development
+/ParkingTicketingAPI/.env.production

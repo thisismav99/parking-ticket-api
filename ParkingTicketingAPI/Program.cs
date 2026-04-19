@@ -1,8 +1,12 @@
 using Application;
 using Infrastructure;
+using ParkingTicketingAPI.Utilities.Helpers;
 using Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure environment variables
+ENVFiles.Exists(".env.production");
 
 // Add services to the container.
 builder.Services.RegisterPersistence(builder.Configuration);
@@ -23,6 +27,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    ENVFiles.Exists(".env.development");
 }
 
 app.UseHttpsRedirection();
