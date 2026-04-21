@@ -20,10 +20,10 @@ namespace Application.Applications.Parking.Command
         public async Task<Result<Guid>> Handle(AddTransactionCommand request, CancellationToken cancellationToken)
         {
             var transaction = new Domain.Entities.Parking.Transaction(
-                request.AddTransactionDTO.AmountToPay,
                 request.AddTransactionDTO.AmountPaid,
                 request.AddTransactionDTO.IsCard,
                 request.AddTransactionDTO.IsCash,
+                request.AddTransactionDTO.ParkingId,
                 request.AddTransactionDTO.CreatedBy,
                 request.AddTransactionDTO.IsActive);
 

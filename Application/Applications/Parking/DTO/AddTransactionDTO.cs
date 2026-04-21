@@ -6,9 +6,6 @@ namespace Application.Applications.Parking.DTO
     public class AddTransactionDTO : BaseDTO
     {
         [Required]
-        public decimal AmountToPay { get; set; }
-
-        [Required]
         public decimal AmountPaid { get; set; }
 
         [Required, Range(0,1)]
@@ -16,5 +13,8 @@ namespace Application.Applications.Parking.DTO
 
         [Required, Range(0, 1)]
         public bool IsCash { get; set; }
+
+        [Required]
+        public Guid ParkingId { get; set; }
     }
 }

@@ -4,10 +4,17 @@ using ParkingTicketingAPI.Utilities.Extensions;
 using ParkingTicketingAPI.Utilities.Helpers;
 using Persistence;
 
-var builder = WebApplication.CreateBuilder(args);
-
 // Configure environment variables
-ENVFiles.Exists(".env.production");
+if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development") 
+{ 
+    ENVFiles.Exists(".env.development");
+}
+else
+{
+    ENVFiles.Exists(".env.production");
+}
+
+var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.RegisterPersistence(builder.Configuration);
@@ -30,7 +37,6 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    ENVFiles.Exists(".env.development");
 }
 
 app.UseHttpsRedirection();

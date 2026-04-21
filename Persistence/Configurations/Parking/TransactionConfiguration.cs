@@ -18,6 +18,9 @@ namespace Persistence.Configurations.Parking
                 .HasComputedColumnSql("[AmountToPay] - [AmountPaid]", stored: false);
             builder.Property(x => x.IsCard).IsRequired();
             builder.Property(x => x.IsCash).IsRequired();
+            builder.Property(x => x.ParkingId).IsRequired();
+
+            builder.HasOne(x => x.Parking).WithMany().HasForeignKey(x => x.ParkingId).OnDelete(DeleteBehavior.Cascade);
 
             builder.ToTable("Transactions", "parking");
         }

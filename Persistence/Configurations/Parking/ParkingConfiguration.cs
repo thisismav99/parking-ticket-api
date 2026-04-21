@@ -16,11 +16,9 @@ namespace Persistence.Configurations.Parking
                 .HasComputedColumnSql("DATEDIFF(SECOND, [ParkDateTime], [ExitDateTime]) / 3600.0", stored: false);
             builder.Property(x => x.VehicleId).IsRequired();
             builder.Property(x => x.EmployeeId).IsRequired();
-            builder.Property(x => x.TransactionId).IsRequired();
 
             builder.HasOne(x => x.Vehicle).WithMany().HasForeignKey(x => x.VehicleId).OnDelete(DeleteBehavior.Cascade);
             builder.HasOne(x => x.Employee).WithMany().HasForeignKey(x => x.EmployeeId).OnDelete(DeleteBehavior.Cascade);
-            builder.HasOne(x => x.Transaction).WithMany().HasForeignKey(x => x.TransactionId).OnDelete(DeleteBehavior.Cascade);
 
             builder.ToTable("Parkings", "parking");
         }

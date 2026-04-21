@@ -15,8 +15,5 @@ namespace Application.Applications.Parking.DTO
 
         [Required]
         public Guid EmployeeId { get; set; }
-
-        [Required]
-        public Guid TransactionId { get; set; }
     }
 }

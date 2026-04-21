@@ -11,5 +11,7 @@
         public bool IsCard { get; set; }
 
         public bool IsCash { get; set; }
+
+        public Guid ParkingId { get; set; }
     }
 }

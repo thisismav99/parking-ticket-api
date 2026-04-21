@@ -16,13 +16,9 @@ namespace Domain.Entities.Parking
 
         public Guid EmployeeId { get; set; }
 
-        public Guid TransactionId { get; set; }
-
         public Vehicle.Vehicle? Vehicle { get; set; }
 
         public Employee.Employee? Employee { get; set; }
-
-        public Transaction? Transaction { get; set; }
 
         private Parking() { }
 
@@ -31,7 +27,6 @@ namespace Domain.Entities.Parking
             DateTime? exitDateTime,
             Guid vehicleId,
             Guid employeeId,
-            Guid transactionId,
             string createdBy,
             bool isActive)
         {
@@ -39,7 +34,6 @@ namespace Domain.Entities.Parking
             ExitDateTime = exitDateTime;
             SetVehicleId(vehicleId);
             SetEmployeeId(employeeId);
-            SetTransactionId(transactionId);
             CreatedBy = createdBy;
             IsActive = isActive;
         }
@@ -61,15 +55,6 @@ namespace Domain.Entities.Parking
                 throw new DomainException("EmployeeId cannot be empty.");
             }
             EmployeeId = employeeId;
-        }
-
-        private void SetTransactionId(Guid transactionId)
-        {
-            if (TransactionId == Guid.Empty)
-            {
-                throw new DomainException("TransactionId cannot be empty.");
-            }
-            TransactionId = transactionId;
         }
     }
 }

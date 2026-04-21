@@ -23,7 +23,6 @@ namespace Application.Applications.Parking.Command
                 request.AddParkingDTO.ExitDateTime,
                 request.AddParkingDTO.VehicleId,
                 request.AddParkingDTO.EmployeeId,
-                request.AddParkingDTO.TransactionId,
                 request.AddParkingDTO.CreatedBy,
                 request.AddParkingDTO.IsActive);
 
