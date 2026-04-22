@@ -5,14 +5,7 @@ using ParkingTicketingAPI.Utilities.Helpers;
 using Persistence;
 
 // Configure environment variables
-if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development") 
-{ 
-    ENVFiles.Exists(".env.development");
-}
-else
-{
-    ENVFiles.Exists(".env.production");
-}
+EnvFiles.Configure(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")!);
 
 var builder = WebApplication.CreateBuilder(args);
 

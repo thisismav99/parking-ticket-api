@@ -1,5 +1,5 @@
 ﻿using Domain.Entities.Common;
-using Domain.Utilities.CustomException;
+using Domain.Utilities.Exceptions;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Domain.Entities.Parking

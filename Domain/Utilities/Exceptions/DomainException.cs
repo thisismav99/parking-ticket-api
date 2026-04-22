@@ -1,4 +1,4 @@
-﻿namespace Domain.Utilities.CustomException
+﻿namespace Domain.Utilities.Exceptions
 {
     internal class DomainException : Exception
     {

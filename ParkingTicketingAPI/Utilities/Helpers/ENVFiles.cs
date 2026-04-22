@@ -2,14 +2,28 @@
 
 namespace ParkingTicketingAPI.Utilities.Helpers
 {
-    public static class ENVFiles
+    public static class EnvFiles
     {
-        public static void Exists(string FileName)
+        public static void Configure(string environment)
         {
-            if (File.Exists(FileName))
-            {
-                Env.Load(FileName);
+            if (environment == "Development") 
+            { 
+                Exists(".env.development");
             }
+            else
+            {
+                Exists(".env.production");
+            }
+        }
+
+        private static void Exists(string fileName)
+        {
+            if (File.Exists(fileName))
+            {
+                Env.Load(fileName);
+            }
+
+            throw new FileNotFoundException($"The specified environment file '{fileName}' was not found.");
         }
     }
 }
