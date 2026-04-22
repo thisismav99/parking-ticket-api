@@ -2,7 +2,7 @@
 
 namespace Application.DTO
 {
-    public class BaseDTO
+    public abstract class BaseDTO
     {
         [Required, MaxLength(100)]
         public string CreatedBy { get; set; } = "direct-api";

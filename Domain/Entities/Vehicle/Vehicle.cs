@@ -1,4 +1,5 @@
 ﻿using Domain.Entities.Common;
+using Domain.Utilities.CustomException;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Domain.Entities.Vehicle
@@ -34,6 +35,8 @@ namespace Domain.Entities.Vehicle
             string createdBy, 
             bool isActive)
         {
+            CheckCarConflict(isElectric, isHybrid);
+
             PlateNo = plateNo;
             Brand = brand;
             Color = color;
@@ -43,6 +46,14 @@ namespace Domain.Entities.Vehicle
             CustomerId = customerId;
             CreatedBy = createdBy;
             IsActive = isActive;
+        }
+
+        private void CheckCarConflict(bool isElectric, bool isHybrid)
+        {
+            if (isElectric && isHybrid)
+            {
+                throw new DomainException("A vehicle cannot be both electric and hybrid.");
+            }
         }
     }
 }

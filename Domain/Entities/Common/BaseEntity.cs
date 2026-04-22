@@ -1,6 +1,6 @@
 ﻿namespace Domain.Entities.Common
 {
-    internal class BaseEntity
+    internal abstract class BaseEntity
     {
         public Guid Id { get; set; }
 
