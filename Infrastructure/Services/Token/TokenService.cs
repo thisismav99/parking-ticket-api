@@ -1,12 +1,14 @@
-﻿using Infrastructure.Interfaces.Token;
+﻿using CSharpFunctionalExtensions;
+using Domain.Entities.Token;
+using Infrastructure.Interfaces.Token;
 using Infrastructure.Utilities.Helpers;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Persistence.Contexts;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
 
 namespace Infrastructure.Services.Token
@@ -15,29 +17,30 @@ namespace Infrastructure.Services.Token
     {
         private readonly IConfiguration _configuration;
         private readonly UserDbContext _userDbContext;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly DbSet<RefreshToken> _refreshToken;
 
         public TokenService(IConfiguration configuration,
-            UserDbContext userDbContext)
+            UserDbContext userDbContext,
+            UserManager<IdentityUser> userManager)
         {
             _configuration = configuration;
             _userDbContext = userDbContext;
+            _userManager = userManager;
+            _refreshToken = _userDbContext.Set<RefreshToken>();
         }
 
-        public string GenerateRefreshToken()
+        public async Task<string> GenerateRefreshToken(RefreshToken refreshToken,
+            CancellationToken cancellationToken)
         {
-            var randomNumber = new byte[64];
-            using var randomNumberGenerator = RandomNumberGenerator.Create();
-            randomNumberGenerator.GetBytes(randomNumber);
+            await _refreshToken.AddAsync(refreshToken, cancellationToken);
+            await _userDbContext.SaveChangesAsync(cancellationToken);
 
-            string refreshToken = Convert.ToBase64String(randomNumber);
-
-            return refreshToken;
+            return refreshToken.Token;
         }
 
         public async Task<string> GenerateToken(IdentityUser identityUser,
-            Domain.Entities.Employee.Employee employee,
-            RoleManager<IdentityRole> roleManager, 
-            UserManager<IdentityUser> userManager)
+            Domain.Entities.Employee.Employee employee)
         {
             var jwt = _configuration.GetSection("Jwt");
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt["Key"]!));
@@ -54,10 +57,10 @@ namespace Infrastructure.Services.Token
                 new Claim(JwtRegisteredClaimNames.PhoneNumber, identityUser.PhoneNumber ?? string.Empty)
             };
 
-            var userClaims = await userManager.GetClaimsAsync(identityUser);
+            var userClaims = await _userManager.GetClaimsAsync(identityUser);
             tokenClaims.AddRange(userClaims);
 
-            var roles = await userManager.GetRolesAsync(identityUser);
+            var roles = await _userManager.GetRolesAsync(identityUser);
             tokenClaims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
             var roleClaims = await GetRoleClaims.RoleClaims(_userDbContext, roles);
@@ -76,9 +79,22 @@ namespace Infrastructure.Services.Token
             return jwtToken;
         }
 
-        public Task RevokeToken()
+        public async Task<Result> RevokeRefreshToken(string refreshToken,
+            CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var token = await _refreshToken.FirstOrDefaultAsync(x => x.Token == refreshToken, cancellationToken);
+
+            if (token is null)
+            {
+                return Result.Failure(GetError.Error(string.Empty, "Refresh token not found."));
+            }
+
+            token.IsRevoked = true;
+            token.DateRevoked = DateTime.UtcNow;
+
+            await _userDbContext.SaveChangesAsync(cancellationToken);
+
+            return Result.Success();
         }
     }
 }

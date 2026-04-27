@@ -68,7 +68,7 @@ namespace ParkingTicketingAPI.Controllers.User
              ], result.Value);
         }
 
-        [HttpPost("/api/[controller]/role")]
+        [HttpPost("role")]
         public async Task<IActionResult> AddUserRole(AddUserRoleDTO addUserRoleDTO,
             CancellationToken cancellationToken)
         {
@@ -91,7 +91,7 @@ namespace ParkingTicketingAPI.Controllers.User
              ], result.Value);
         }
 
-        [HttpPost("/api/[controller]/claim")]
+        [HttpPost("claim")]
         public async Task<IActionResult> AddUserClaim(AddUserClaimDTO addUserClaimDTO,
             CancellationToken cancellationToken)
         {
@@ -112,6 +112,21 @@ namespace ParkingTicketingAPI.Controllers.User
                 LinkKeys.AddUserRole,
                 LinkKeys.AddUserClaim
              ], result.Value);
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(LoginDTO loginDTO,
+            CancellationToken cancellationToken)
+        {
+            var command = new LoginUserCommand(loginDTO);
+            var result = await _mediator.Send(command, cancellationToken);
+
+            if (result.IsFailure)
+            {
+                return BadRequest(result.Error);
+            }
+
+            return Ok(result.Value);
         }
     }
 }

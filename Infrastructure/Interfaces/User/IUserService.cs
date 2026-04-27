@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using Domain.Entities.User;
 using Microsoft.AspNetCore.Identity;
 
 namespace Infrastructure.Interfaces.User
@@ -17,5 +18,7 @@ namespace Infrastructure.Interfaces.User
         Task<Result<string>> AddUserRole(string email, string role);
 
         Task<Result<string>> AddUserClaim(string email, string claimType, string claimValue);
+
+        Task<UserEmployee?> GetUserEmployee(string userId, CancellationToken cancellationToken);
     }
 }

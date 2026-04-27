@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.Contexts;
 
@@ -11,9 +12,11 @@ using Persistence.Contexts;
 namespace Persistence.Migrations.UserDb
 {
     [DbContext(typeof(UserDbContext))]
-    partial class UserDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260422162552_RefreshToken")]
+    partial class RefreshToken
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,7 +36,7 @@ namespace Persistence.Migrations.UserDb
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("DATEADD(DAY, 7, SYSUTCDATETIME())");
 
-                    b.Property<DateTime?>("DateRevoked")
+                    b.Property<DateTime>("DateRevoked")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsExpired")
@@ -42,7 +45,9 @@ namespace Persistence.Migrations.UserDb
                         .HasComputedColumnSql("CASE WHEN [DateExpires] <= SYSUTCDATETIME() THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END");
 
                     b.Property<bool>("IsRevoked")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<string>("Token")
                         .IsRequired()

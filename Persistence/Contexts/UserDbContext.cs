@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Persistence.Configurations.Token;
 using Persistence.Configurations.User;
 
 namespace Persistence.Contexts
@@ -13,6 +14,7 @@ namespace Persistence.Contexts
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new UserEmployeeConfiguration());
+            modelBuilder.ApplyConfiguration(new RefreshTokenConfiguration());
             modelBuilder.Entity<IdentityUser>().ToTable("Users", "user");
             modelBuilder.Entity<IdentityRole>().ToTable("Roles", "user");
             modelBuilder.Entity<IdentityUserRole<string>>().ToTable("UserRoles", "user");

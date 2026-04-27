@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using Domain.Entities.User;
 using Infrastructure.Interfaces.User;
 using Infrastructure.Utilities.Helpers;
 using Microsoft.AspNetCore.Identity;
@@ -12,14 +13,14 @@ namespace Infrastructure.Services.User
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly UserDbContext _userDbContext;
-        private readonly DbSet<Domain.Entities.User.UserEmployee> _userEmployees;
+        private readonly DbSet<UserEmployee> _userEmployees;
 
         public UserService(UserManager<IdentityUser> userManager,
             UserDbContext userDbContext)
         {
             _userManager = userManager;
             _userDbContext = userDbContext;
-            _userEmployees = _userDbContext.Set<Domain.Entities.User.UserEmployee>();
+            _userEmployees = _userDbContext.Set<UserEmployee>();
         }
 
         public async Task<Result<string>> AddUser(IdentityUser identityUser, 
@@ -35,7 +36,7 @@ namespace Infrastructure.Services.User
                 return Result.Failure<string>(string.Join(", ", errors));
             }
 
-            var userEmployee = new Domain.Entities.User.UserEmployee
+            var userEmployee = new UserEmployee
             {
                 UserId = identityUser.Id,
                 EmployeeId = employeeId
@@ -95,6 +96,11 @@ namespace Infrastructure.Services.User
         public async Task<List<IdentityUser>> GetIdentityUsers(int pageNumber, int pageSize, CancellationToken cancellationToken)
         {
             return await GetPagedList<IdentityUser>.GetList(_userManager.Users, pageNumber, pageSize, cancellationToken);
+        }
+
+        public async Task<UserEmployee?> GetUserEmployee(string userId, CancellationToken cancellationToken)
+        {
+            return await _userEmployees.FirstOrDefaultAsync(x => x.UserId == userId, cancellationToken);
         }
     }
 }

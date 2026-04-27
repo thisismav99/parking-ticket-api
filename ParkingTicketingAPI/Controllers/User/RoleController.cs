@@ -36,7 +36,7 @@ namespace ParkingTicketingAPI.Controllers.User
             ], result.Value);
         }
 
-        [HttpPost("/api/[controller]/claim")]
+        [HttpPost("claim")]
         public async Task<IActionResult> Claim(AddRoleClaimDTO addRoleClaimDTO,
             CancellationToken cancellationToken)
         {

@@ -22,8 +22,6 @@ namespace ParkingTicketingAPI.Utilities.Helpers
             {
                 Env.Load(fileName);
             }
-
-            throw new FileNotFoundException($"The specified environment file '{fileName}' was not found.");
         }
     }
 }

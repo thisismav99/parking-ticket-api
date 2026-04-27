@@ -16,5 +16,15 @@
         {
             return $"No [{identifier}] found.";
         }
+
+        public static string InvalidEmail(string email)
+        {
+            return $"Invalid email address: {email}";
+        }
+
+        public static string InvalidPassword()
+        {
+            return "Invalid password.";
+        }
     }
 }

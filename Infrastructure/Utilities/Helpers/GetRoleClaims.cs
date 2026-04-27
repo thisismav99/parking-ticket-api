@@ -6,7 +6,7 @@ namespace Infrastructure.Utilities.Helpers
 {
     internal static class GetRoleClaims
     {
-        public static async Task<List<Claim>> RoleClaims(UserDbContext userDbContext,
+        public static async Task<IList<Claim>> RoleClaims(UserDbContext userDbContext,
             IList<string> roles)
         {
             var roleClaims = await(
