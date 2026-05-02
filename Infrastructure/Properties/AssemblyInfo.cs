@@ -1,6 +1,8 @@
 ﻿using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("Application")]
+[assembly: InternalsVisibleTo("ParkingTicketingAPI.Test")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 namespace Infrastructure.Properties
 {
     internal static class AssemblyInfo

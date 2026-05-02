@@ -3,6 +3,7 @@
 [assembly: InternalsVisibleTo("Persistence")]
 [assembly: InternalsVisibleTo("Infrastructure")]
 [assembly: InternalsVisibleTo("Application")]
+[assembly: InternalsVisibleTo("ParkingTicketingAPI.Test")]
 namespace Domain.Properties
 {
     internal static class AssemblyInfo
