@@ -2,6 +2,7 @@
 using Application.Applications.User.DTO;
 using Application.Applications.User.Query;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ParkingTicketingAPI.Utilities.Enums;
 
@@ -45,6 +46,7 @@ namespace ParkingTicketingAPI.Controllers.User
             return Ok(result);
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Post(AddUserDTO addUserDTO,
             CancellationToken cancellationToken)
@@ -114,6 +116,7 @@ namespace ParkingTicketingAPI.Controllers.User
              ], result.Value);
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDTO loginDTO,
             CancellationToken cancellationToken)

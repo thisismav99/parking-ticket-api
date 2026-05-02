@@ -37,7 +37,7 @@ namespace ParkingTicketingAPI.Controllers.User
         }
 
         [HttpPost("claim")]
-        public async Task<IActionResult> Claim(AddRoleClaimDTO addRoleClaimDTO,
+        public async Task<IActionResult> AddRoleClaim(AddRoleClaimDTO addRoleClaimDTO,
             CancellationToken cancellationToken)
         {
             var command = new AddRoleClaimCommand(addRoleClaimDTO);

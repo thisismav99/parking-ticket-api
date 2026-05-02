@@ -17,10 +17,8 @@ builder.Services.RegisterApplication();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
 builder.Services.AddControllers();
-
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
+builder.Services.Swagger();
 builder.Services.RateLimiting();
 
 var app = builder.Build();

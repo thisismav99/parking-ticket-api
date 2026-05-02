@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using ParkingTicketingAPI.Utilities.Enums;
 using ParkingTicketingAPI.Utilities.Helpers;
@@ -8,6 +9,7 @@ namespace ParkingTicketingAPI.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [EnableRateLimiting("fixed")]
+    [Authorize]
     public abstract class ApiBaseController : ControllerBase
     {
         private readonly LinkGenerator _linkGenerator;
@@ -39,7 +41,7 @@ namespace ParkingTicketingAPI.Controllers
                         linkGenerator.Add("DeleteById", _linkGenerator.GenerateLink(HttpContext, "Delete", ControllerContext.ActionDescriptor.ControllerName, value));
                         break;
                     case LinkKeys.AddRoleClaim:
-                        linkGenerator.Add("AddRoleClaim", _linkGenerator.GenerateLink<string>(HttpContext, "Claim", ControllerContext.ActionDescriptor.ControllerName, null));
+                        linkGenerator.Add("AddRoleClaim", _linkGenerator.GenerateLink<string>(HttpContext, "AddRoleClaim", ControllerContext.ActionDescriptor.ControllerName, null));
                         break;
                     case LinkKeys.AddRole:
                         linkGenerator.Add("AddRole", _linkGenerator.GenerateLink<string>(HttpContext, "Post", ControllerContext.ActionDescriptor.ControllerName, null));
