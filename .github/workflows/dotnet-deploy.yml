@@ -9,7 +9,7 @@ jobs:
   deploy:
    runs-on: ubuntu-latest
    env:
-    PROJECT_SOLUTION: 'ParkingTicketingAPI/ParkingTicketingAPI.sln'
+    PROJECT_SOLUTION: 'ParkingTicketingAPI.sln'
     APP_PROJECT: 'ParkingTicketingAPI/ParkingTicketingAPI.csproj'
     PUBLISH_DIR: './publish'
    steps:
