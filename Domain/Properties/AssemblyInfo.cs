@@ -4,6 +4,7 @@
 [assembly: InternalsVisibleTo("Infrastructure")]
 [assembly: InternalsVisibleTo("Application")]
 [assembly: InternalsVisibleTo("ParkingTicketingAPI.Test")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 namespace Domain.Properties
 {
     internal static class AssemblyInfo

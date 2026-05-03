@@ -21,11 +21,12 @@ namespace ParkingTicketingAPI.Test.UnitTests.Applications.Common.Address
             // Act
             var sut = new AddAddressCommandHandler(_fixture.MockAddressService().Object);
 
-            var result = await sut.Handle(new AddAddressCommand(_fixture.ValidAddressDTO()), CancellationToken.None);
+            var result = await sut.Handle(new AddAddressCommand(_fixture.ValidAddAddressDTO()), CancellationToken.None);
 
             // Assert
             Assert.True(result.IsSuccess);
             Assert.Equal(_fixture.GetAddressGuid(), result.Value);
+            Assert.IsType<Guid>(result.Value);
             _fixture.VerifyAddAddress();
         }
     }
