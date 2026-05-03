@@ -1,14 +1,13 @@
 ﻿using Application.Applications.Common.DTO;
 using Infrastructure.Interfaces.Common;
 using Moq;
+using ParkingTicketingAPI.Test.UnitTests.Fixtures;
 
 namespace ParkingTicketingAPI.Test.UnitTests.Applications.Common.Address.Fixture
 {
-    public class AddressFixture
+    public class AddressFixture : BaseFixture
     {
         private readonly Mock<IAddressService> _mockAddressService;
-        private Guid addressGuid = Guid.Parse("3f9b2a6c-8d4e-4f71-9c2a-5e7b1a93d6f8");
-        private Guid invalidAddressGuid = Guid.Parse("4f9b2a6c-8d4e-4f71-9c2a-5e7b1a93d6f9");
 
         public AddressFixture()
         {
@@ -17,7 +16,7 @@ namespace ParkingTicketingAPI.Test.UnitTests.Applications.Common.Address.Fixture
 
         internal Mock<IAddressService> MockAddressService() => _mockAddressService;
 
-        public Guid GetAddressGuid() => addressGuid;
+        public Guid GetAddressGuid() => guid;
 
         #region AddAddressCommandHandler
         public AddAddressDTO ValidAddAddressDTO()
@@ -38,7 +37,7 @@ namespace ParkingTicketingAPI.Test.UnitTests.Applications.Common.Address.Fixture
         public void SetupAddAddress()
         {
             _mockAddressService.Setup(a => a.AddAddress(It.IsAny<Domain.Entities.Common.Address>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(addressGuid);
+                .ReturnsAsync(guid);
         }
 
         public void VerifyAddAddress()
@@ -62,24 +61,24 @@ namespace ParkingTicketingAPI.Test.UnitTests.Applications.Common.Address.Fixture
 
         public void SetupValidGetByIdAddress()
         {
-             _mockAddressService.Setup(a => a.GetAddressById(It.Is<Guid>(id => id == addressGuid), It.IsAny<CancellationToken>()))
+             _mockAddressService.Setup(a => a.GetAddressById(It.Is<Guid>(id => id == guid), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(ValidGetAddressById());
         }
 
         public void SetupInvalidGetByIdAddress()
         {
-            _mockAddressService.Setup(a => a.GetAddressById(It.Is<Guid>(id => id == invalidAddressGuid), It.IsAny<CancellationToken>()))
+            _mockAddressService.Setup(a => a.GetAddressById(It.Is<Guid>(id => id == invalidGuid), It.IsAny<CancellationToken>()))
                .ReturnsAsync((Domain.Entities.Common.Address?)null);
         }
 
         public void VerifyValidGetByIdAddress()
         {
-            _mockAddressService.Verify(a => a.GetAddressById(It.Is<Guid>(id => id == addressGuid), It.IsAny<CancellationToken>()), Times.Once);
+            _mockAddressService.Verify(a => a.GetAddressById(It.Is<Guid>(id => id == guid), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         public void VerifyInvalidGetByIdAddress()
         {
-            _mockAddressService.Verify(a => a.GetAddressById(It.Is<Guid>(id => id == invalidAddressGuid), It.IsAny<CancellationToken>()), Times.Once);
+            _mockAddressService.Verify(a => a.GetAddressById(It.Is<Guid>(id => id == invalidGuid), It.IsAny<CancellationToken>()), Times.Once);
         }
         #endregion
 

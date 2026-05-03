@@ -40,7 +40,7 @@ namespace Domain.Entities.Parking
 
         private void SetVehicleId(Guid vehicleId)
         {
-            if (VehicleId == Guid.Empty)
+            if (vehicleId == Guid.Empty)
             {
                 throw new DomainException("VehicleId cannot be empty.");
             }
@@ -50,7 +50,7 @@ namespace Domain.Entities.Parking
 
         private void SetEmployeeId(Guid employeeId)
         {
-            if (EmployeeId == Guid.Empty)
+            if (employeeId == Guid.Empty)
             {
                 throw new DomainException("EmployeeId cannot be empty.");
             }

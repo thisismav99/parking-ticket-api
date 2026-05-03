@@ -5,29 +5,29 @@ namespace ParkingTicketingAPI.Test.UnitTests.Applications.Common.Address
 {
     public sealed class AddAddressCommandHandlerTest : IClassFixture<AddressFixture>
     {
-        private readonly AddressFixture _fixture;
+        private readonly AddressFixture _addressFixture;
 
-        public AddAddressCommandHandlerTest(AddressFixture fixture)
+        public AddAddressCommandHandlerTest(AddressFixture addressFixture)
         {
-            _fixture = fixture;
+            _addressFixture = addressFixture;
         }
 
         [Fact(DisplayName =  "Address Id should be returned when adding a valid address")]
         public async Task AddAddressCommandHandlerSuccess()
         {
             // Arrange
-            _fixture.SetupAddAddress();
+            _addressFixture.SetupAddAddress();
 
             // Act
-            var sut = new AddAddressCommandHandler(_fixture.MockAddressService().Object);
+            var sut = new AddAddressCommandHandler(_addressFixture.MockAddressService().Object);
 
-            var result = await sut.Handle(new AddAddressCommand(_fixture.ValidAddAddressDTO()), CancellationToken.None);
+            var result = await sut.Handle(new AddAddressCommand(_addressFixture.ValidAddAddressDTO()), CancellationToken.None);
 
             // Assert
             Assert.True(result.IsSuccess);
-            Assert.Equal(_fixture.GetAddressGuid(), result.Value);
+            Assert.Equal(_addressFixture.GetAddressGuid(), result.Value);
             Assert.IsType<Guid>(result.Value);
-            _fixture.VerifyAddAddress();
+            _addressFixture.VerifyAddAddress();
         }
     }
 }
