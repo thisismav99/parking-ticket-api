@@ -1,0 +1,42 @@
+name: ParkingTicketingAPI Deploy
+
+on:
+ push:
+  branches: [main]
+ workflow_dispatch: # Allows manual triggering of the workflow from the GitHub Actions tab
+
+jobs: 
+  deploy:
+   runs-on: ubuntu-latest
+   env:
+    PROJECT_SOLUTION: 'ParkingTicketingAPI/ParkingTicketingAPI.sln'
+    APP_PROJECT: 'ParkingTicketingAPI/ParkingTicketingAPI.csproj'
+    PUBLISH_DIR: './publish'
+   steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'
+
+    - name: Restore dependencies
+      run: dotnet restore "${{ env.PROJECT_SOLUTION }}"
+
+    - name: Build Solution
+      run: dotnet build "${{ env.PROJECT_SOLUTION }}" --no-restore --configuration Release
+
+    - name: Run Tests
+      run: dotnet test "${{ env.PROJECT_SOLUTION }}" --no-build --configuration Release --verbosity normal
+
+    - name: Publish ParkingTicketingAPI
+      run: dotnet publish "${{ env.APP_PROJECT }}" --no-build --no-restore --configuration Release --output "${{ env.PUBLISH_DIR }}"
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: parking-ticketing-api-publish-${{ github.sha }}
+        path: ${{ env.PUBLISH_DIR }}
+        if-no-files-found: error
+

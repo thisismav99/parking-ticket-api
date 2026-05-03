@@ -24,5 +24,8 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore "${{ env.TEST_PROJECT }}"
 
+      - name: Build Test Project
+        run: dotnet build "${{ env.TEST_PROJECT }}" --no-restore --configuration Release
+
       - name: Run tests
-        run: dotnet test "${{ env.TEST_PROJECT }}" --no-restore --configuration Release --verbosity normal
+        run: dotnet test "${{ env.TEST_PROJECT }}" --no-build --configuration Release --verbosity normal
